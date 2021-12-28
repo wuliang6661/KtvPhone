@@ -2,9 +2,16 @@ package com.ipad.ktvphone.api;
 
 import android.util.Log;
 
+import com.blankj.utilcode.util.AppUtils;
+import com.blankj.utilcode.util.DeviceUtils;
+
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -33,6 +40,7 @@ public class ApiManager {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i(TAG, "log: " + message));
         loggingInterceptor.setLevel(level);
         builder.addInterceptor(loggingInterceptor);
+        builder.addInterceptor(headerInterceptor);
     }
 
     private static class SingletonHolder {
@@ -61,5 +69,18 @@ public class ApiManager {
                 .build();
         return mRetrofit.create(service);
     }
+
+
+    /**
+     * 请求头增加公共参数
+     */
+    Interceptor headerInterceptor = chain -> {
+        Request request;
+        // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
+        request = chain.request().newBuilder()
+                .addHeader("Device_id", DeviceUtils.getAndroidID())
+                .build();
+        return chain.proceed(request);
+    };
 
 }

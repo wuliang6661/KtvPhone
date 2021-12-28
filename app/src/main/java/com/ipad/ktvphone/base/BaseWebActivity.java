@@ -1,6 +1,6 @@
 package com.ipad.ktvphone.base;
 
-import android.os.Build;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.webkit.WebSettings;
@@ -38,6 +38,7 @@ public abstract class BaseWebActivity extends BaseActivity {
     /**
      * 初始化webview的各种属性
      */
+    @SuppressLint("SetJavaScriptEnabled")
     private void initWebViewSettings() {
         WebSettings settings = mWebView.getSettings();
         //支持获取手势焦点
@@ -68,11 +69,7 @@ public abstract class BaseWebActivity extends BaseActivity {
         //当webView调用requestFocus时为webview设置节点
         settings.setNeedInitialFocus(true);
         //设置支持自动加载图片
-        if (Build.VERSION.SDK_INT >= 19) {
-            settings.setLoadsImagesAutomatically(true);
-        } else {
-            settings.setLoadsImagesAutomatically(false);
-        }
+        settings.setLoadsImagesAutomatically(true);
         //设置编码格式
         settings.setDefaultTextEncodingName("UTF-8");
     }

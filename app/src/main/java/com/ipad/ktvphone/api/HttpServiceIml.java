@@ -1,5 +1,7 @@
 package com.ipad.ktvphone.api;
 
+import rx.Observable;
+
 /**
  * Created by wuliang on 2017/4/19.
  * <p>
@@ -22,8 +24,68 @@ public class HttpServiceIml {
     }
 
 
+    /**
+     * 心跳连接
+     */
+    public Observable<String> postHeartbeat() {
+        return getService().postHeartbeat("online", System.currentTimeMillis()).compose(RxResultHelper.httpRusult());
+    }
 
 
+    /**
+     * 查询正在播放的歌曲信息
+     */
+    public Observable<String> getPlaySong() {
+        return getService().getPlaySong().compose(RxResultHelper.httpRusult());
+    }
 
+
+    /**
+     * 获取每个小时的排位状态
+     */
+    public Observable<String> getQueueStatus() {
+        return getService().getQueueStatus().compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 获取歌曲列表1
+     */
+    public Observable<String> getSongsList() {
+        return getService().getSongsList().compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 获取歌曲列表2
+     */
+    public Observable<String> getSongListList() {
+        return getService().getSongListList().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取点歌弹窗内容
+     */
+    public Observable<String> getPopupsInfo() {
+        return getService().getPopupsInfo().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 点歌表单提交
+     */
+    public Observable<String> onDemandSongCommit(String song_id) {
+        return getService().onDemandSongCommit(song_id).compose(RxResultHelper.httpRusult());
+    }
+
+
+    /**
+     * 获取支付结果
+     * <p>
+     * 1、“点歌表单提交”接口返回二维码展示到前端后调用此接口来获取用户支付是否成功结果；
+     * 2、此接口等待时间较长，超时后默认支付失败
+     */
+    public Observable<String> getPayResult() {
+        return getService().getPayResult().compose(RxResultHelper.httpRusult());
+    }
 
 }
