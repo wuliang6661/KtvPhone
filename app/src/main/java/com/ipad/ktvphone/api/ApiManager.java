@@ -55,10 +55,6 @@ public class ApiManager {
     /**
      * 获取请求代理
      *
-     * @param service
-     * @param url
-     * @param <T>
-     * @return
      */
     public <T> T configRetrofit(Class<T> service, String url) {
         Retrofit mRetrofit = new Retrofit.Builder()
