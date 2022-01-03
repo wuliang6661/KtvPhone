@@ -7,7 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.blankj.utilcode.util.ToastUtils;
+//import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.utils.AppManager;
 
 /**
@@ -52,7 +52,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     public void showToast(String message){
-        ToastUtils.showShort(message);
+//        ToastUtils.showShort(message);
     }
 
 

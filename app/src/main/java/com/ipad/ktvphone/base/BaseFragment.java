@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import com.blankj.utilcode.util.ToastUtils;
+//import com.blankj.utilcode.util.ToastUtils;
 
 public class BaseFragment extends Fragment {
 
@@ -31,7 +31,7 @@ public class BaseFragment extends Fragment {
     }
 
 
-    public void showToast(String message){
-        ToastUtils.showShort(message);
-    }
+//    public void showToast(String message){
+//        ToastUtils.showShort(message);
+//    }
 }

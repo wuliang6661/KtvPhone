@@ -2,6 +2,11 @@ package com.ipad.ktvphone;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Window;
+import android.view.WindowManager;
+
+import com.blankj.utilcode.util.FragmentUtils;
+import com.ipad.ktvphone.ui.HomeFragment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,12 +19,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //取消标题
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //取消状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+        FragmentUtils.replace(getSupportFragmentManager(),new HomeFragment(),R.id.container_fragment);
     }
 
 
 
-    private void requestMsg(){
+
+
+
+    private void requestMsg() {
 //        Observable.interval(0, retryInterval, TimeUnit.MILLISECONDS)
 //                .take(retryCount)
 //                .observeOn(Schedulers.io())

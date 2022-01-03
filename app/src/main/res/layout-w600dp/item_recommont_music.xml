@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="126dp"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="18dp"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="116dp">
+
+
+        <ImageView
+            android:id="@+id/music_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f0f0f0" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:layout_marginRight="20dp"
+            android:background="@drawable/start_603e3e3e_end_000f0f0f"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dp"
+            android:text="23万播放"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
+
+    </FrameLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="11dp"
+        android:text="古风"
+        android:textColor="@color/black"
+        android:textSize="9sp" />
+
+</LinearLayout>
