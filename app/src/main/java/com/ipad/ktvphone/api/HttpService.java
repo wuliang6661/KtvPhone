@@ -1,6 +1,7 @@
 package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.BaseResult;
+import com.ipad.ktvphone.entity.VersionBO;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -25,7 +26,7 @@ public interface HttpService {
      */
     @FormUrlEncoded
     @POST("/on_demand_songs/api/v1/heartbeat")
-    Observable<BaseResult<String>> postHeartbeat(@Field("data") String data, @Field("time") long time);
+    Observable<BaseResult<VersionBO>> postHeartbeat(@Field("data") String data, @Field("time") long time);
 
 
     /**

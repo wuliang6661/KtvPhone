@@ -12,7 +12,6 @@ public class VersionBO {
 
     private String latest_version;
     private String download_url;
-    private boolean is_update;
 
     public String getLatest_version() {
         return latest_version;
@@ -30,11 +29,4 @@ public class VersionBO {
         this.download_url = download_url;
     }
 
-    public boolean isIs_update() {
-        return is_update;
-    }
-
-    public void setIs_update(boolean is_update) {
-        this.is_update = is_update;
-    }
 }

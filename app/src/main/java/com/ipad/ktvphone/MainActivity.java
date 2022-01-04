@@ -1,19 +1,27 @@
 package com.ipad.ktvphone;
 
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.blankj.utilcode.util.FragmentUtils;
-import com.ipad.ktvphone.ui.HomeFragment;
-import com.ipad.ktvphone.utils.RootUtils;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blankj.utilcode.util.FragmentUtils;
+import com.ipad.ktvphone.api.HttpResultSubscriber;
+import com.ipad.ktvphone.api.HttpServiceIml;
+import com.ipad.ktvphone.entity.VersionBO;
+import com.ipad.ktvphone.ui.HomeFragment;
+import com.ipad.ktvphone.utils.RootUtils;
+import com.ipad.ktvphone.utils.UpdateUtils;
+
 import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.Observer;
+import rx.Scheduler;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,8 +35,48 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        FragmentUtils.replace(getSupportFragmentManager(),new HomeFragment(),R.id.container_fragment);
+        FragmentUtils.replace(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
         RootUtils.upgradeRootPermission(getPackageCodePath());
+        startHeartbeat();
+    }
+
+
+    /**
+     * 建立心跳连接
+     */
+    private void startHeartbeat() {
+        Observable.interval(0, 5000, TimeUnit.MILLISECONDS)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        requestHeart();
+                    }
+                });
+    }
+
+
+    private void requestHeart() {
+        HttpServiceIml.postHeartbeat().subscribe(new HttpResultSubscriber<VersionBO>() {
+            @Override
+            public void onSuccess(VersionBO s) {
+                new UpdateUtils().checkUpdate(MainActivity.this, s);
+            }
+
+            @Override
+            public void onFiled(String message) {
+
+            }
+        });
     }
 
 
