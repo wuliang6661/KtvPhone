@@ -19,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.Observer;
-import rx.Scheduler;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
