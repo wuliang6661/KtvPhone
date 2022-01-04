@@ -21,7 +21,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CustomActivityOnCrash.install(this);
-//        CustomActivityOnCrash.setErrorActivityClass(CustomErrorActivity.class);
     }
 
     @Override
