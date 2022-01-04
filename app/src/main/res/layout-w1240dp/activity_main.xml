@@ -15,7 +15,7 @@
 
 
         <FrameLayout
-            android:layout_width="335dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:background="#ff8000">
 
@@ -37,7 +37,7 @@
 
 
             <EditText
-                android:layout_width="800dp"
+                android:layout_width="500dp"
                 android:layout_height="49dp"
                 android:layout_marginLeft="47dp"
                 android:background="@drawable/slide_f4f7fd_conner_25"

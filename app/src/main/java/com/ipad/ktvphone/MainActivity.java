@@ -7,6 +7,7 @@ import android.view.WindowManager;
 
 import com.blankj.utilcode.util.FragmentUtils;
 import com.ipad.ktvphone.ui.HomeFragment;
+import com.ipad.ktvphone.utils.RootUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -27,11 +28,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         FragmentUtils.replace(getSupportFragmentManager(),new HomeFragment(),R.id.container_fragment);
+        RootUtils.upgradeRootPermission(getPackageCodePath());
     }
-
-
-
-
 
 
     private void requestMsg() {

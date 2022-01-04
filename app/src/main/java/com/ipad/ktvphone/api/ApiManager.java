@@ -2,6 +2,8 @@ package com.ipad.ktvphone.api;
 
 import android.util.Log;
 
+import com.blankj.utilcode.util.DeviceUtils;
+
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.Interceptor;
@@ -69,7 +71,7 @@ public class ApiManager {
         Request request;
         // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
         request = chain.request().newBuilder()
-//                .addHeader("Device_id", DeviceUtils.getAndroidID())
+                .addHeader("Device_id", DeviceUtils.getAndroidID())
                 .build();
         return chain.proceed(request);
     };
