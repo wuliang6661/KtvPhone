@@ -17,7 +17,7 @@ import rx.Observable;
 
 public interface HttpService {
 
-    String URL = "http://49.233.17.237:13000/mock/36/";   //测试服
+    String URL = "https://dsongs.xuju.club/";   //测试服
 //    String URL = "http://mapi.open.yinghezhong.com/";  //正式环境
 
 

@@ -3,6 +3,7 @@ package com.ipad.ktvphone.api;
 import android.util.Log;
 
 import com.blankj.utilcode.util.DeviceUtils;
+import com.blankj.utilcode.util.LogUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -32,6 +33,7 @@ public class ApiManager {
     private ApiManager() {
         //手动创建一个OkHttpClient并设置超时时间
         builder = new OkHttpClient.Builder();
+        OkHttpClientNoVerifyUtil.createClientBuilder_noVerify(builder);
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.BODY;
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i(TAG, "log: " + message));
@@ -69,9 +71,10 @@ public class ApiManager {
      */
     Interceptor headerInterceptor = chain -> {
         Request request;
+        LogUtils.e(DeviceUtils.getAndroidID());
         // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
         request = chain.request().newBuilder()
-                .addHeader("Device_id", DeviceUtils.getAndroidID())
+                .addHeader("DEVICE-ID", DeviceUtils.getAndroidID())
                 .build();
         return chain.proceed(request);
     };
