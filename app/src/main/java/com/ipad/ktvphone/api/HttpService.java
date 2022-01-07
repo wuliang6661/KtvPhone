@@ -1,6 +1,7 @@
 package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.BaseResult;
+import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
 import retrofit2.http.Field;
@@ -51,10 +52,10 @@ public interface HttpService {
 
 
     /**
-     * 获取歌曲列表2
+     * 获取歌单列表
      */
     @GET("/on_demand_songs/api/v1/get_songlist_list")
-    Observable<BaseResult<String>> getSongListList();
+    Observable<BaseResult<PlayListBO>> getSongListList();
 
     /**
      * 获取点歌弹窗内容

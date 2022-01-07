@@ -17,6 +17,10 @@
         android:name="android.permission.INSTALL_PACKAGES"
         tools:ignore="ProtectedPermissions" />
 
+    <meta-data
+        android:name="com.ipad.ktvphone.base.GeneratedAppGlideModule"
+        android:value="GlideModule" />
+
     <application
         android:name=".base.MyApplication"
         android:allowBackup="true"

@@ -6,7 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ipad.ktvphone.R;
+import com.ipad.ktvphone.api.HttpResultSubscriber;
+import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseFragment;
+import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
@@ -48,7 +51,7 @@ public class HomeFragment extends BaseFragment {
         initView();
         setTimeAdapter();
         setRankingAdapter();
-        setRecommendAdapter();
+        getPlayList();
     }
 
 
@@ -65,6 +68,24 @@ public class HomeFragment extends BaseFragment {
         dataList1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList3.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+    }
+
+
+    /**
+     * 获取歌单列表
+     */
+    private void getPlayList() {
+        HttpServiceIml.getSongListList().subscribe(new HttpResultSubscriber<PlayListBO>() {
+            @Override
+            public void onSuccess(PlayListBO s) {
+                setRecommendAdapter(s);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -108,13 +129,9 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    private void setRecommendAdapter() {
-        List<String> sss = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            sss.add("1");
-        }
-        dataList1.setAdapter(new RecommendAdapter(sss));
-        dataList2.setAdapter(new RecommendAdapter(sss));
-        dataList3.setAdapter(new RecommendAdapter(sss));
+    private void setRecommendAdapter(PlayListBO listBO) {
+        dataList1.setAdapter(new RecommendAdapter(listBO.data1));
+        dataList2.setAdapter(new RecommendAdapter(listBO.data2));
+        dataList3.setAdapter(new RecommendAdapter(listBO.data3));
     }
 }

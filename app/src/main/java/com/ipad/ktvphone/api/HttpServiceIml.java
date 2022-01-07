@@ -1,5 +1,6 @@
 package com.ipad.ktvphone.api;
 
+import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
 import rx.Observable;
@@ -61,7 +62,7 @@ public class HttpServiceIml {
     /**
      * 获取歌曲列表2
      */
-    public static Observable<String> getSongListList() {
+    public static Observable<PlayListBO> getSongListList() {
         return getService().getSongListList().compose(RxResultHelper.httpRusult());
     }
 

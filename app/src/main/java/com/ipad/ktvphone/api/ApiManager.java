@@ -72,9 +72,10 @@ public class ApiManager {
     Interceptor headerInterceptor = chain -> {
         Request request;
         LogUtils.e(DeviceUtils.getAndroidID());
+        // todo 暂时写固定值
         // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
         request = chain.request().newBuilder()
-                .addHeader("DEVICE-ID", DeviceUtils.getAndroidID())
+                .addHeader("DEVICE-ID", "521bb02f92656ef5")
                 .build();
         return chain.proceed(request);
     };
