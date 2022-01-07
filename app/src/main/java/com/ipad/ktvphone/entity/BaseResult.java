@@ -12,35 +12,31 @@ public class BaseResult<T> {
 //    3）	errorCode: 错误编码，当有错误发生时，此errorCode包含有错误编码
 //    4）	data：返回数据
 
-    private static String SURCESS = "1";
 
-    private String status;
+    private String errmsg;
 
-    private String errorMessage;
-
-    private String errorCode;
+    private Integer errcode;
 
     private T data;
 
     public boolean surcess() {
-        return SURCESS.equals(status);
+        return errcode == 0;
     }
 
-
-    public String getStatus() {
-        return status;
+    public String getErrmsg() {
+        return errmsg;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setErrmsg(String errmsg) {
+        this.errmsg = errmsg;
     }
 
-    public String getErrorMessage() {
-        return errorMessage;
+    public Integer getErrcode() {
+        return errcode;
     }
 
-    public void setErrorMessage(String errorMessage) {
-        this.errorMessage = errorMessage;
+    public void setErrcode(Integer errcode) {
+        this.errcode = errcode;
     }
 
     public T getData() {
@@ -49,13 +45,5 @@ public class BaseResult<T> {
 
     public void setData(T data) {
         this.data = data;
-    }
-
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(String errorCode) {
-        this.errorCode = errorCode;
     }
 }

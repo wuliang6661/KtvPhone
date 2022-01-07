@@ -23,7 +23,7 @@ public class RxResultHelper {
                     if (result.surcess()) {
                         return createData(result.getData());
                     } else {
-                        return Observable.error(new RuntimeException((String) result.getData()));
+                        return Observable.error(new RuntimeException(result.getErrmsg()));
                     }
                 }
         ).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
