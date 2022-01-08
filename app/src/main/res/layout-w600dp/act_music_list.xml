@@ -8,7 +8,11 @@
     tools:ignore="MissingDefaultResource">
 
 
+    <include layout="@layout/layout_header_view" />
+
+
     <LinearLayout
+        android:id="@+id/go_back"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginLeft="6dp"
@@ -47,7 +51,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp"
+            android:layout_marginLeft="23dp"
             android:layout_marginTop="24dp"
             android:orientation="horizontal">
 
@@ -56,39 +60,36 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="排名"
+                android:text="排序"
                 android:textColor="#393939"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:textSize="19sp" />
 
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="53dp"
-                android:layout_weight="1.2"
+                android:layout_weight="1.5"
                 android:text="歌曲"
                 android:textColor="#393939"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:textSize="19sp" />
 
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="100dp"
-                android:layout_weight="2.5"
-                android:text="点播次数"
+                android:layout_weight="3"
+                android:text="演唱者"
                 android:textColor="#393939"
-                android:textSize="19sp"
-                android:textStyle="bold" />
+                android:textSize="19sp" />
 
 
         </LinearLayout>
 
 
-
-
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/music_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 

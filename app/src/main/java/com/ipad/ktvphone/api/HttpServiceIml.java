@@ -1,7 +1,10 @@
 package com.ipad.ktvphone.api;
 
+import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
+
+import java.util.List;
 
 import rx.Observable;
 
@@ -46,8 +49,8 @@ public class HttpServiceIml {
     /**
      * 获取每个小时的排位状态
      */
-    public static Observable<String> getQueueStatus() {
-        return getService().getQueueStatus().compose(RxResultHelper.httpRusult());
+    public static Observable<List<MusicBo>> searchMusic(int limit, String keyWord) {
+        return getService().searchMusic(20, limit, keyWord).compose(RxResultHelper.httpRusult());
     }
 
 

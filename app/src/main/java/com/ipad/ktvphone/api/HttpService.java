@@ -1,13 +1,17 @@
 package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.BaseResult;
+import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
+
+import java.util.List;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 import rx.Observable;
 
 /**
@@ -38,10 +42,10 @@ public interface HttpService {
 
 
     /**
-     * 获取每个小时的排位状态
+     * 搜索歌曲
      */
-    @GET("/on_demand_songs/api/v1/get_queue_status")
-    Observable<BaseResult<String>> getQueueStatus();
+    @GET("/on_demand_songs/api/v1/search_songs")
+    Observable<BaseResult<List<MusicBo>>> searchMusic(@Query("from") int from, @Query("limit") int limit, @Query("keyword") String keyword);
 
 
     /**
@@ -73,7 +77,7 @@ public interface HttpService {
 
     /**
      * 获取支付结果
-     *
+     * <p>
      * 1、“点歌表单提交”接口返回二维码展示到前端后调用此接口来获取用户支付是否成功结果；
      * 2、此接口等待时间较长，超时后默认支付失败
      */

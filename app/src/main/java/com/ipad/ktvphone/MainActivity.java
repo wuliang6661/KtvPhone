@@ -1,42 +1,105 @@
 package com.ipad.ktvphone;
 
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.FrameLayout;
 
 import com.blankj.utilcode.util.FragmentUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
+import com.ipad.ktvphone.base.BaseActivity;
+import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.VersionBO;
+import com.ipad.ktvphone.entity.event.HideSearchEvent;
+import com.ipad.ktvphone.entity.event.SearchMusicEvent;
 import com.ipad.ktvphone.ui.HomeFragment;
+import com.ipad.ktvphone.ui.SearchFragment;
 import com.ipad.ktvphone.utils.RootUtils;
 import com.ipad.ktvphone.utils.UpdateUtils;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
+    private EditText editText;
+
+    private SearchFragment searchDialog;
+
+    private FrameLayout searchFragment;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EventBus.getDefault().register(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        editText = findViewById(R.id.edit_view);
+        searchFragment = findViewById(R.id.search_fragment);
+        setListener();
+
+        searchDialog = new SearchFragment();
+        FragmentUtils.replace(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
+        RootUtils.upgradeRootPermission(getPackageCodePath());
+        startHeartbeat();
+    }
+
+    @Override
+    protected int getLayout() {
         //取消标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //取消状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_main);
+        return R.layout.activity_main;
+    }
 
-        FragmentUtils.replace(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
-        RootUtils.upgradeRootPermission(getPackageCodePath());
-        startHeartbeat();
+
+    private void setListener() {
+        editText.setOnEditorActionListener((v, actionId, event) -> {
+            boolean handled = false;
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                searchMusic(editText.getText().toString());
+                handled = true;
+            }
+            return handled;
+        });
+    }
+
+
+    /**
+     * 搜索歌曲
+     */
+    private void searchMusic(String keyWord) {
+        HttpServiceIml.searchMusic(1, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+            @Override
+            public void onSuccess(List<MusicBo> musicBos) {
+                if (musicBos == null || musicBos.size() == 0) {
+                    return;
+                }
+                searchFragment.setVisibility(View.VISIBLE);
+                FragmentUtils.add(getSupportFragmentManager(), searchDialog, R.id.search_fragment);
+                EventBus.getDefault().post(new SearchMusicEvent(keyWord, musicBos));
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
     }
 
 
@@ -78,6 +141,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(HideSearchEvent event) {
+        searchFragment.setVisibility(View.GONE);
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
 
     private void requestMsg() {
 //        Observable.interval(0, retryInterval, TimeUnit.MILLISECONDS)

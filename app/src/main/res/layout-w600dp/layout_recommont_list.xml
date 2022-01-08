@@ -26,18 +26,21 @@
         android:id="@+id/data_list1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="18dp" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/data_list2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="18dp" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/data_list3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="18dp" />
 
 </LinearLayout>
