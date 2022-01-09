@@ -57,6 +57,7 @@ public class SearchFragment extends BaseFragment {
         dialogBgView.setOnClickListener(v -> EventBus.getDefault().post(new HideSearchEvent()));
         tvAllSearchMusic.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
+            bundle.putInt("type", 0);
             bundle.putString("keyWord", keyWord);
             gotoActivity(MusicListActivity.class, bundle, false);
         });

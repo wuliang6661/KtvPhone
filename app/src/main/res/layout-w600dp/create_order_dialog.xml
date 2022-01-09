@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="522dp"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:ignore="MissingDefaultResource">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="13dp"
+            android:layout_marginLeft="9dp"
+            android:background="#FF1111" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_weight="1"
+            android:text="*只能预约点播当天歌曲哦~ 预约播放的时间范围内按照预约顺序播放"
+            android:textColor="#676767"
+            android:textSize="13sp" />
+
+
+        <TextView
+            android:id="@+id/count_down_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="30"
+            android:textColor="#EB0000"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="S"
+            android:textColor="#EB0000"
+            android:textSize="15sp" />
+
+
+        <ImageView
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/close_img" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#11303030" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#44EBEBEB"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="22dp"
+                android:text="选择播放时段："
+                android:textColor="#717171"
+                android:textSize="22sp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginBottom="22dp"
+                android:text="点播歌曲："
+                android:textColor="#717171"
+                android:textSize="22sp" />
+
+
+        </LinearLayout>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="支付费用："
+            android:textColor="#444444"
+            android:textSize="22sp" />
+
+
+        <TextView
+            android:id="@+id/music_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2"
+            android:textColor="#FF2A11"
+            android:textSize="30sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="9dp"
+            android:text="元"
+            android:textColor="#444444"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#11303030" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/slide_707070_conner_2dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="微信支付" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="亿万用户的选择，更快更安全"
+            android:textColor="#979797"
+            android:textSize="12sp" />
+
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:id="@+id/qr_code_img"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="22dp" />
+
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="9dp"
+        android:layout_marginBottom="21dp" />
+
+
+</LinearLayout>

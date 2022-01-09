@@ -5,6 +5,7 @@ import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
 import java.util.List;
+import java.util.UUID;
 
 import rx.Observable;
 
@@ -47,18 +48,18 @@ public class HttpServiceIml {
 
 
     /**
-     * 获取每个小时的排位状态
+     * 搜索歌曲
      */
     public static Observable<List<MusicBo>> searchMusic(int limit, String keyWord) {
-        return getService().searchMusic(20, limit, keyWord).compose(RxResultHelper.httpRusult());
+        return getService().searchMusic(limit, 1000, keyWord).compose(RxResultHelper.httpRusult());
     }
 
 
     /**
-     * 获取歌曲列表1
+     * 获取歌单内部歌曲
      */
-    public static Observable<String> getSongsList() {
-        return getService().getSongsList().compose(RxResultHelper.httpRusult());
+    public static Observable<List<MusicBo>> getSongsList(int limit, String keyWord) {
+        return getService().getSongsList(limit, 1000, keyWord).compose(RxResultHelper.httpRusult());
     }
 
 
@@ -69,18 +70,17 @@ public class HttpServiceIml {
         return getService().getSongListList().compose(RxResultHelper.httpRusult());
     }
 
-    /**
-     * 获取点歌弹窗内容
-     */
-    public static Observable<String> getPopupsInfo() {
-        return getService().getPopupsInfo().compose(RxResultHelper.httpRusult());
-    }
 
     /**
-     * 点歌表单提交
+     * 生成支付订单
      */
-    public static Observable<String> onDemandSongCommit(String song_id) {
-        return getService().onDemandSongCommit(song_id).compose(RxResultHelper.httpRusult());
+    public static Observable<String> createPayOrder(MusicBo musicBo) {
+        return getService().onDemandSongCommit(UUID.randomUUID().toString(),
+                musicBo.song_id,
+                musicBo.song_name,
+                musicBo.song_cover,
+                musicBo.singer_name,
+                musicBo.play_url).compose(RxResultHelper.httpRusult());
     }
 
 

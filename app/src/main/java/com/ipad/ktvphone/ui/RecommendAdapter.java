@@ -1,5 +1,9 @@
 package com.ipad.ktvphone.ui;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+
 import com.ipad.ktvphone.R;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
@@ -24,5 +28,13 @@ public class RecommendAdapter extends LGRecycleViewAdapter<PlayListBO.Data1Bean>
 //       holder.setText(R.id.bofang_num,s.);
         holder.setText(R.id.play_list_name, s.songlist_name);
         holder.setImageUrl(holder.itemView.getContext(), R.id.music_img, s.songlist_cover);
+        holder.getView(R.id.item_view).setOnClickListener(v -> {
+            Intent intent = new Intent(holder.itemView.getContext(),MusicListActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt("type", 1);
+            bundle.putString("songlist_id", s.songlist_id);
+            intent.putExtras(bundle);
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 }

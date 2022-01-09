@@ -49,10 +49,10 @@ public interface HttpService {
 
 
     /**
-     * 获取歌曲列表1
+     * 获取歌单内部歌曲
      */
-    @GET("/on_demand_songs/api/v1/get_songs_list")
-    Observable<BaseResult<String>> getSongsList();
+    @GET("/on_demand_songs/api/v1/get_songlist_songs")
+    Observable<BaseResult<List<MusicBo>>> getSongsList(@Query("from") int from, @Query("limit") int limit, @Query("songlist_id") String songlist_id);
 
 
     /**
@@ -61,18 +61,18 @@ public interface HttpService {
     @GET("/on_demand_songs/api/v1/get_songlist_list")
     Observable<BaseResult<PlayListBO>> getSongListList();
 
-    /**
-     * 获取点歌弹窗内容
-     */
-    @GET("/on_demand_songs/api/v1/get_popups_info")
-    Observable<BaseResult<String>> getPopupsInfo();
 
     /**
-     * 点歌表单提交
+     * 生成支付订单
      */
     @FormUrlEncoded
-    @POST("/on_demand_songs/api/v1/on_demand_song_commit")
-    Observable<BaseResult<String>> onDemandSongCommit(@Field("song_id") String song_id);
+    @POST("/on_demand_songs/api/v1/create_pay_order")
+    Observable<BaseResult<String>> onDemandSongCommit(@Field("request_id") String request_id,
+                                                      @Field("song_id") String song_id,
+                                                      @Field("song_name") String song_name,
+                                                      @Field("song_cover") String song_cover,
+                                                      @Field("singer_name") String singer_name,
+                                                      @Field("play_url") String play_url);
 
 
     /**

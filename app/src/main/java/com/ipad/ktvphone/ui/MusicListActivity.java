@@ -33,6 +33,7 @@ public class MusicListActivity extends BaseActivity {
     private RecyclerView musicList;
 
     List<MusicBo> musicData;
+    private int type;
 
     @Override
     protected int getLayout() {
@@ -53,9 +54,15 @@ public class MusicListActivity extends BaseActivity {
         findViewById(R.id.go_back).setOnClickListener(v -> finish());
         musicList.setLayoutManager(new LinearLayoutManager(this));
         setListener();
-        String keyWord = getIntent().getExtras().getString("keyWord");
-        editText.setText(keyWord);
-        searchMusic(keyWord);
+        type = getIntent().getExtras().getInt("type");
+        if (type == 0) {
+            String keyWord = getIntent().getExtras().getString("keyWord");
+            editText.setText(keyWord);
+            searchMusic(keyWord);
+        } else {
+            String songlist_id = getIntent().getExtras().getString("songlist_id");
+            getSongList(songlist_id);
+        }
     }
 
 
@@ -74,10 +81,29 @@ public class MusicListActivity extends BaseActivity {
      * 搜索歌曲
      */
     private void searchMusic(String keyWord) {
-        HttpServiceIml.searchMusic(1, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.searchMusic(0, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> musicBos) {
                 musicData = musicBos;
+                setAdapter();
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 获取歌单内部歌曲列表
+     */
+    private void getSongList(String songlist_id) {
+        HttpServiceIml.getSongsList(0, songlist_id).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+            @Override
+            public void onSuccess(List<MusicBo> s) {
+                musicData = s;
                 setAdapter();
             }
 

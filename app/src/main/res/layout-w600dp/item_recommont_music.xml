@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_marginLeft="18dp"
     android:gravity="center"
+    android:id="@+id/item_view"
     android:orientation="vertical"
     tools:ignore="MissingDefaultResource">
 

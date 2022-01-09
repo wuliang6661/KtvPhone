@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity {
      * 搜索歌曲
      */
     private void searchMusic(String keyWord) {
-        HttpServiceIml.searchMusic(1, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.searchMusic(0, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> musicBos) {
                 if (musicBos == null || musicBos.size() == 0) {
