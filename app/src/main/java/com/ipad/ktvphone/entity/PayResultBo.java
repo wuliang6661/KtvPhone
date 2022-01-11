@@ -4,6 +4,6 @@ public class PayResultBo {
 
     public String pay_result;
 
-    public int is_continue;
+    public int is_polling;
 
 }

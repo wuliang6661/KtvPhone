@@ -1,7 +1,6 @@
 package com.ipad.ktvphone.utils;
 
 import android.app.Activity;
-import android.view.Gravity;
 
 import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
@@ -40,7 +39,7 @@ public class CreateOrderUtils {
     private static void showPayDialog(OrderBO orderBO) {
         Activity activity = AppManager.getAppManager().curremtActivity();
         CreateOrderDialog dialog = new CreateOrderDialog(activity, orderBO);
-        dialog.showAtLocation(activity.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        dialog.show();
     }
 
 }

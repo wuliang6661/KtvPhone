@@ -2,7 +2,8 @@ package com.ipad.ktvphone.ui;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
+import android.os.CountDownTimer;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -14,7 +15,6 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.ipad.ktvphone.R;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
-import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.entity.PayResultBo;
 import com.ipad.ktvphone.utils.ZxingUtils;
@@ -22,9 +22,9 @@ import com.ipad.ktvphone.utils.ZxingUtils;
 import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Func1;
-import rx.functions.Function;
 import rx.schedulers.Schedulers;
 
 public class CreateOrderDialog extends PopupWindow {
@@ -39,6 +39,9 @@ public class CreateOrderDialog extends PopupWindow {
     private TextView playingTime;
     private TextView playingPrice;
     private ImageView qrCodeImg;
+
+    private Subscription subscription;
+    private CountDownTimer timer;
 
 
     public CreateOrderDialog(Activity activity, OrderBO musicBo) {
@@ -59,7 +62,15 @@ public class CreateOrderDialog extends PopupWindow {
         this.setOutsideTouchable(true);
         //设置SelectPicPopupWindow弹出窗体动画效果
         // this.setBackgroundDrawable(dw);
-        this.setOnDismissListener(() -> backgroundAlpha(1f));
+        this.setOnDismissListener(() -> {
+            if (subscription != null) {
+                subscription.unsubscribe();
+            }
+            if (timer != null) {
+                timer.cancel();
+            }
+            backgroundAlpha(1f);
+        });
     }
 
 
@@ -80,6 +91,7 @@ public class CreateOrderDialog extends PopupWindow {
         playingPrice.setText(orderBO.cost);
         qrCodeImg.setImageBitmap(ZxingUtils.createNoRectQRCode(orderBO.code_url, 240));
         queryPaySuress();
+        startTimer();
     }
 
 
@@ -89,27 +101,52 @@ public class CreateOrderDialog extends PopupWindow {
     private void queryPaySuress() {
         int timer = Integer.parseInt(orderBO.timer);
         int time_out = Integer.parseInt(orderBO.pay_time_out);
-        Observable.interval(0, timer, TimeUnit.SECONDS)
-                .take(time_out / timer)
+        subscription = Observable.interval(0, timer, TimeUnit.SECONDS).take(time_out / timer)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .flatMap((Func1<Long, Observable<PayResultBo>>) aLong -> HttpServiceIml.getPayResult(orderBO.order_id))
                 .takeUntil(new Func1<PayResultBo, Boolean>() {
                     @Override
                     public Boolean call(PayResultBo payResultBo) {
-                        return payResultBo.is_continue == 0;
+                        return payResultBo.is_polling == 0;
                     }
                 }).subscribe(new HttpResultSubscriber<PayResultBo>() {
-            @Override
-            public void onSuccess(PayResultBo payResultBo) {
+                    @Override
+                    public void onSuccess(PayResultBo payResultBo) {
 
+                    }
+
+                    @Override
+                    public void onFiled(String message) {
+
+                    }
+                });
+
+    }
+
+
+    /**
+     * 启动一个秒数的倒计时
+     */
+    private void startTimer() {
+        timer = new CountDownTimer(Integer.parseInt(orderBO.pay_time_out) * 1000L, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                count_down_time.setText(millisUntilFinished / 1000 + "");
             }
 
             @Override
-            public void onFiled(String message) {
-
+            public void onFinish() {
+                dismiss();
             }
-        });
+        };
+        timer.start();
+    }
+
+
+    public void show() {
+        backgroundAlpha(0.5f);
+        showAtLocation(activity.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
 
