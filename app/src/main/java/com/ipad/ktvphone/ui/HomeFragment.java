@@ -83,7 +83,7 @@ public class HomeFragment extends BaseFragment {
         dataList3 = rootView.findViewById(R.id.data_list3);
         playingMusicBg = rootView.findViewById(R.id.playing_music_bg);
         playingMusicImg = rootView.findViewById(R.id.playing_music_img);
-        playingMusicName = rootView.findViewById(R.id.play_music_name);
+        playingMusicName = rootView.findViewById(R.id.playing_music_name);
         playingMusicPerson = rootView.findViewById(R.id.playing_music_person);
         timeRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         timeRecycle.setNestedScrollingEnabled(false);
