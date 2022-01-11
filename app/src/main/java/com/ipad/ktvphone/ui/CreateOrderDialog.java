@@ -12,9 +12,20 @@ import android.widget.TextView;
 
 import com.blankj.utilcode.util.SizeUtils;
 import com.ipad.ktvphone.R;
+import com.ipad.ktvphone.api.HttpResultSubscriber;
+import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
+import com.ipad.ktvphone.entity.PayResultBo;
 import com.ipad.ktvphone.utils.ZxingUtils;
+
+import java.util.concurrent.TimeUnit;
+
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.functions.Function;
+import rx.schedulers.Schedulers;
 
 public class CreateOrderDialog extends PopupWindow {
 
@@ -68,6 +79,37 @@ public class CreateOrderDialog extends PopupWindow {
         playingMusicName.setText(orderBO.song_name);
         playingPrice.setText(orderBO.cost);
         qrCodeImg.setImageBitmap(ZxingUtils.createNoRectQRCode(orderBO.code_url, 240));
+        queryPaySuress();
+    }
+
+
+    /**
+     * 轮询查询支付结果
+     */
+    private void queryPaySuress() {
+        int timer = Integer.parseInt(orderBO.timer);
+        int time_out = Integer.parseInt(orderBO.pay_time_out);
+        Observable.interval(0, timer, TimeUnit.SECONDS)
+                .take(time_out / timer)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .flatMap((Func1<Long, Observable<PayResultBo>>) aLong -> HttpServiceIml.getPayResult(orderBO.order_id))
+                .takeUntil(new Func1<PayResultBo, Boolean>() {
+                    @Override
+                    public Boolean call(PayResultBo payResultBo) {
+                        return payResultBo.is_continue == 0;
+                    }
+                }).subscribe(new HttpResultSubscriber<PayResultBo>() {
+            @Override
+            public void onSuccess(PayResultBo payResultBo) {
+
+            }
+
+            @Override
+            public void onFiled(String message) {
+
+            }
+        });
     }
 
 

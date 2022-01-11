@@ -3,6 +3,7 @@ package com.ipad.ktvphone.api;
 import com.ipad.ktvphone.entity.BaseResult;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
+import com.ipad.ktvphone.entity.PayResultBo;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
@@ -83,7 +84,7 @@ public interface HttpService {
      * 2、此接口等待时间较长，超时后默认支付失败
      */
     @GET("/on_demand_songs/api/v1/get_pay_result")
-    Observable<BaseResult<String>> getPayResult();
+    Observable<BaseResult<PayResultBo>> getPayResult(@Query("order_id") String order_id);
 
 
 }

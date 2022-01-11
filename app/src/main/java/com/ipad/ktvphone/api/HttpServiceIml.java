@@ -2,6 +2,7 @@ package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
+import com.ipad.ktvphone.entity.PayResultBo;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
@@ -91,8 +92,8 @@ public class HttpServiceIml {
      * 1、“点歌表单提交”接口返回二维码展示到前端后调用此接口来获取用户支付是否成功结果；
      * 2、此接口等待时间较长，超时后默认支付失败
      */
-    public static Observable<String> getPayResult() {
-        return getService().getPayResult().compose(RxResultHelper.httpRusult());
+    public static Observable<PayResultBo> getPayResult(String orderId) {
+        return getService().getPayResult(orderId).compose(RxResultHelper.httpRusult());
     }
 
 }
