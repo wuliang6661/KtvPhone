@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.logging.Logger;
 
 public class InstallApkUtils {
     public static Context mContext = null;
@@ -25,6 +27,37 @@ public class InstallApkUtils {
         }
         return true;
     }
+
+
+
+    /*
+　　@pararm apkPath 等待安装的app全路径，如：/sdcard/app/app.apk
+**/
+    private static boolean clientInstall(String apkPath) {
+        PrintWriter PrintWriter = null;
+        Process process = null;
+        try {
+            process = Runtime.getRuntime().exec("su");
+            PrintWriter = new PrintWriter(process.getOutputStream());
+            PrintWriter.println("chmod 777 " + apkPath);
+            PrintWriter
+                    .println("export LD_LIBRARY_PATH=/vendor/lib:/system/lib");
+            PrintWriter.println("pm install -r " + apkPath);
+            // PrintWriter.println("exit");
+            PrintWriter.flush();
+            PrintWriter.close();
+            int value = process.waitFor();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (process != null) {
+                process.destroy();
+            }
+        }
+        return false;
+    }
+
 
 
     public static void excuteSuCMD(String currenttempfilepath) {

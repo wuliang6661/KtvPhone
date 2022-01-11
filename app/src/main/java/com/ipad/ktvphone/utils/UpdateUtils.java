@@ -101,7 +101,8 @@ public class UpdateUtils {
                             // 下载完成
                             if (numread < 0) {
                                 handler.sendEmptyMessage(0x22);
-                                AppUtils.installApp(apkFile);
+//                                AppUtils.installApp(apkFile);
+                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
                                 break;
                             }
                             fos.write(buffer, 0, numread);
