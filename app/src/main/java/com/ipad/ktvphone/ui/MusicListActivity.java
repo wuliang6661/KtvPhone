@@ -19,6 +19,7 @@ import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseActivity;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.utils.CreateOrderUtils;
+import com.ipad.ktvphone.utils.MusicPlayUtils;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
@@ -150,6 +151,17 @@ public class MusicListActivity extends BaseActivity {
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
                 holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MusicPlayUtils.getInstance().startPlay(musicBo, new MusicPlayUtils.OnMusicFinishListener() {
+                            @Override
+                            public void onFinish(MusicBo musicBo) {
+
+                            }
+                        });
+                    }
+                });
             }
         };
         musicList.setAdapter(adapter);
