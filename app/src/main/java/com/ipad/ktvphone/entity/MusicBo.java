@@ -15,12 +15,20 @@ public class MusicBo implements Parcelable {
 
     public String play_url;
 
+    public Integer volume;
+
+
     protected MusicBo(Parcel in) {
         song_id = in.readString();
         song_name = in.readString();
         song_cover = in.readString();
         singer_name = in.readString();
         play_url = in.readString();
+        if (in.readByte() == 0) {
+            volume = null;
+        } else {
+            volume = in.readInt();
+        }
     }
 
     @Override
@@ -30,6 +38,12 @@ public class MusicBo implements Parcelable {
         dest.writeString(song_cover);
         dest.writeString(singer_name);
         dest.writeString(play_url);
+        if (volume == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(volume);
+        }
     }
 
     @Override
