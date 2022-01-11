@@ -17,6 +17,8 @@ public class MusicBo implements Parcelable {
 
     public Integer volume;
 
+    public String play_count;
+
 
     protected MusicBo(Parcel in) {
         song_id = in.readString();
@@ -29,6 +31,7 @@ public class MusicBo implements Parcelable {
         } else {
             volume = in.readInt();
         }
+        play_count = in.readString();
     }
 
     @Override
@@ -44,6 +47,7 @@ public class MusicBo implements Parcelable {
             dest.writeByte((byte) 1);
             dest.writeInt(volume);
         }
+        dest.writeString(play_count);
     }
 
     @Override

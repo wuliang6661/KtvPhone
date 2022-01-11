@@ -1,26 +1,40 @@
 package com.ipad.ktvphone.ui;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.blankj.utilcode.util.StringUtils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CircleCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.ipad.ktvphone.R;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseFragment;
+import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.PlayListBO;
+import com.ipad.ktvphone.utils.CreateOrderUtils;
+import com.ipad.ktvphone.utils.MusicPlayUtils;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 首页播放的fragment
@@ -34,6 +48,11 @@ public class HomeFragment extends BaseFragment {
     private RecyclerView dataList1;
     private RecyclerView dataList2;
     private RecyclerView dataList3;
+
+    private FrameLayout playingMusicBg;
+    private ImageView playingMusicImg;
+    private TextView playingMusicName;
+    private TextView playingMusicPerson;
 
     @Nullable
     @Override
@@ -50,8 +69,9 @@ public class HomeFragment extends BaseFragment {
 
         initView();
         setTimeAdapter();
-        setRankingAdapter();
         getPlayList();
+        getPlayMusic();
+        getTopSongs();
     }
 
 
@@ -61,6 +81,10 @@ public class HomeFragment extends BaseFragment {
         dataList1 = rootView.findViewById(R.id.data_list1);
         dataList2 = rootView.findViewById(R.id.data_list2);
         dataList3 = rootView.findViewById(R.id.data_list3);
+        playingMusicBg = rootView.findViewById(R.id.playing_music_bg);
+        playingMusicImg = rootView.findViewById(R.id.playing_music_img);
+        playingMusicName = rootView.findViewById(R.id.play_music_name);
+        playingMusicPerson = rootView.findViewById(R.id.playing_music_person);
         timeRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         timeRecycle.setNestedScrollingEnabled(false);
         rankList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -79,6 +103,52 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onSuccess(PlayListBO s) {
                 setRecommendAdapter(s);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+    /**
+     * 获取正在播放的歌曲
+     */
+    private void getPlayMusic() {
+        HttpServiceIml.getPlaySong().subscribe(new HttpResultSubscriber<MusicBo>() {
+            @Override
+            public void onSuccess(MusicBo musicBo) {
+                if (musicBo == null || StringUtils.isEmpty(musicBo.song_name)) {
+                    playingMusicName.setText("歌曲名：暂无");
+                    playingMusicPerson.setText("歌手：暂无");
+                } else {
+                    Glide.with(getActivity()).load(musicBo.song_cover)
+                            .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                            .into(playingMusicImg);
+                    playingMusicName.setText("歌曲名：" + musicBo.song_name);
+                    playingMusicPerson.setText("歌手：" + musicBo.singer_name);
+                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                    playingMusicBg.startAnimation(animation);
+                }
+            }
+
+            @Override
+            public void onFiled(String message) {
+                showToast(message);
+            }
+        });
+    }
+
+
+    /**
+     * 获取排行榜歌曲
+     */
+    private void getTopSongs() {
+        HttpServiceIml.getTopSongs(0).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+            @Override
+            public void onSuccess(List<MusicBo> musicBos) {
+                setRankingAdapter(musicBos);
             }
 
             @Override
@@ -109,20 +179,51 @@ public class HomeFragment extends BaseFragment {
     }
 
 
-    private void setRankingAdapter() {
-        List<String> sss = new ArrayList<>();
-        for (int i = 0; i < 16; i++) {
-            sss.add("1");
-        }
-        LGRecycleViewAdapter<String> adapter = new LGRecycleViewAdapter<String>(sss) {
+    private void setRankingAdapter(List<MusicBo> musicBos) {
+        LGRecycleViewAdapter<MusicBo> adapter = new LGRecycleViewAdapter<MusicBo>(musicBos) {
             @Override
             public int getLayoutId(int viewType) {
                 return R.layout.item_ranking_music;
             }
 
             @Override
-            public void convert(LGViewHolder holder, String s, int position) {
+            public void convert(LGViewHolder holder, MusicBo musicBo, int position) {
+                TextView positionNum = (TextView) holder.getView(R.id.list_num);
+                positionNum.setText(getNum(position));
+                positionNum.setTextColor(Color.parseColor("#ffffff"));
+                switch (position) {
+                    case 0:
+                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_da5d6f_conner_2_5_dp));
+                        break;
+                    case 1:
+                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_55c0bb_conner_2_5_dp));
+                        break;
+                    case 2:
+                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_8980ce_conner_2_5_dp));
+                        break;
+                    default:
+                        positionNum.setTextColor(Color.parseColor("#8B8B8B"));
+                        positionNum.setBackgroundColor(Color.parseColor("#ffffff"));
+                        break;
+                }
+                holder.setText(R.id.music_name, musicBo.song_name);
+                holder.setText(R.id.music_person, musicBo.singer_name);
+                holder.setText(R.id.play_num, musicBo.play_count);
+                Glide.with(getActivity()).load(musicBo.song_cover)
+                        .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                        .into((ImageView) holder.getView(R.id.music_img));
+                holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MusicPlayUtils.getInstance().startPlay(musicBo, new MusicPlayUtils.OnMusicFinishListener() {
+                            @Override
+                            public void onFinish(MusicBo musicBo) {
 
+                            }
+                        });
+                    }
+                });
             }
         };
         rankList.setAdapter(adapter);
@@ -133,5 +234,11 @@ public class HomeFragment extends BaseFragment {
         dataList1.setAdapter(new RecommendAdapter(listBO.data1));
         dataList2.setAdapter(new RecommendAdapter(listBO.data2));
         dataList3.setAdapter(new RecommendAdapter(listBO.data3));
+    }
+
+
+    private String getNum(int position) {
+        int num = position + 1;
+        return num < 10 ? "0" + num : num + "";
     }
 }

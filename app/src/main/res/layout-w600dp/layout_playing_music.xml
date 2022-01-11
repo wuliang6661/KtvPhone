@@ -37,7 +37,7 @@
             android:background="@mipmap/playing_music_bg">
 
             <ImageView
-                android:id="@+id/playing_music"
+                android:id="@+id/playing_music_img"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center" />
@@ -53,13 +53,14 @@
             android:layout_marginLeft="15dp"
             android:layout_marginTop="13dp"
             android:includeFontPadding="false"
-            android:text="歌曲名：ENEMY（宿敌）"
+            android:text="歌曲名：暂无"
             android:textColor="#616161"
             android:textSize="14sp"
             android:textStyle="bold" />
 
 
         <TextView
+            android:id="@+id/playing_music_person"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/playing_music_name"
@@ -67,7 +68,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="8dp"
             android:includeFontPadding="false"
-            android:text="歌手：Imagine Dragons、JID、英雄联盟"
+            android:text="歌手：暂无"
             android:textColor="#616161"
             android:textSize="11sp" />
 

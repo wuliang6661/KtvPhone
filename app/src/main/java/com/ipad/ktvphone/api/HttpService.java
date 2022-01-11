@@ -40,7 +40,13 @@ public interface HttpService {
      * 查询正在播放的歌曲信息
      */
     @GET("/on_demand_songs/api/v1/get_play_song")
-    Observable<BaseResult<String>> getPlaySong();
+    Observable<BaseResult<MusicBo>> getPlaySong();
+
+    /**
+     * 获取排行榜歌曲
+     */
+    @GET("/on_demand_songs/api/v1/search_top_songs")
+    Observable<BaseResult<List<MusicBo>>> getTopSongs(@Query("from") int from, @Query("limit") int limit);
 
 
     /**

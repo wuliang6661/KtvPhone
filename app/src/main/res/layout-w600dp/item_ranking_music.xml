@@ -12,6 +12,7 @@
 
 
     <TextView
+        android:id="@+id/list_num"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/slide_da5d6f_conner_2_5_dp"
@@ -31,9 +32,9 @@
 
 
         <ImageView
+            android:id="@+id/music_img"
             android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="#f0f0f0" />
+            android:layout_height="20dp" />
 
         <LinearLayout
             android:layout_width="100dp"
@@ -43,6 +44,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/music_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="ENEMY"
@@ -58,6 +60,7 @@
                 android:orientation="horizontal">
 
                 <TextView
+                    android:id="@+id/music_person"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:includeFontPadding="false"
@@ -70,7 +73,8 @@
                     android:layout_width="6dp"
                     android:layout_height="6dp"
                     android:layout_marginLeft="2dp"
-                    android:src="@mipmap/fire_logo" />
+                    android:src="@mipmap/fire_logo"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
@@ -89,6 +93,7 @@
 
 
         <TextView
+            android:id="@+id/play_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="100,341,000"
@@ -100,7 +105,8 @@
         <ImageView
             android:layout_width="8dp"
             android:layout_height="5dp"
-            android:layout_marginLeft="5dp" />
+            android:layout_marginLeft="5dp"
+            android:visibility="gone" />
 
 
         <TextView
@@ -109,13 +115,15 @@
             android:layout_marginLeft="2dp"
             android:text="102%"
             android:textColor="#ED695A"
-            android:textSize="8sp" />
+            android:textSize="8sp"
+            android:visibility="gone" />
 
 
     </LinearLayout>
 
 
     <LinearLayout
+        android:id="@+id/play_music"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:background="@drawable/slide_white_conner_1dp_strock_8d8d8d"
@@ -148,6 +156,7 @@
 
 
     <TextView
+        android:id="@+id/create_order"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginLeft="15dp"

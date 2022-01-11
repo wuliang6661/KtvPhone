@@ -44,7 +44,7 @@ public class HttpServiceIml {
     /**
      * 查询正在播放的歌曲信息
      */
-    public static Observable<String> getPlaySong() {
+    public static Observable<MusicBo> getPlaySong() {
         return getService().getPlaySong().compose(RxResultHelper.httpRusult());
     }
 
@@ -66,10 +66,17 @@ public class HttpServiceIml {
 
 
     /**
-     * 获取歌曲列表2
+     * 获取歌单列表
      */
     public static Observable<PlayListBO> getSongListList() {
         return getService().getSongListList().compose(RxResultHelper.httpRusult());
+    }
+
+    /**
+     * 获取排行榜歌曲
+     */
+    public static Observable<List<MusicBo>> getTopSongs(int limit) {
+        return getService().getTopSongs(limit, 1000).compose(RxResultHelper.httpRusult());
     }
 
 
