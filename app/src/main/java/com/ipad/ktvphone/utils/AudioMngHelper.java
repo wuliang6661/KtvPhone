@@ -131,8 +131,8 @@ public class AudioMngHelper {
      */
     public int setVoice100(int num) {
         int a = (int) Math.ceil((num) * getSystemMaxVolume() * 0.01);
-        a = a <= 0 ? 0 : a;
-        a = a >= 100 ? 100 : a;
+        a = Math.max(a, 0);
+        a = Math.min(a, 100);
         audioManager.setStreamVolume(NOW_AUDIO_TYPE, a, 0);
         return get100CurrentVolume();
     }
@@ -145,8 +145,8 @@ public class AudioMngHelper {
      */
     public int addVoice100() {
         int a = (int) Math.ceil((VOICE_STEP_100 + get100CurrentVolume()) * getSystemMaxVolume() * 0.01);
-        a = a <= 0 ? 0 : a;
-        a = a >= 100 ? 100 : a;
+        a = Math.max(a, 0);
+        a = Math.min(a, 100);
         audioManager.setStreamVolume(NOW_AUDIO_TYPE, a, NOW_FLAG);
         return get100CurrentVolume();
     }
@@ -159,8 +159,8 @@ public class AudioMngHelper {
      */
     public int subVoice100() {
         int a = (int) Math.floor((get100CurrentVolume() - VOICE_STEP_100) * getSystemMaxVolume() * 0.01);
-        a = a <= 0 ? 0 : a;
-        a = a >= 100 ? 100 : a;
+        a = Math.max(a, 0);
+        a = Math.min(a, 100);
         audioManager.setStreamVolume(NOW_AUDIO_TYPE, a, NOW_FLAG);
         return get100CurrentVolume();
     }
