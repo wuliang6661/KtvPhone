@@ -8,6 +8,7 @@ import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.ui.CreateOrderDialog;
+import com.ipad.ktvphone.ui.PayErrorDialog;
 
 public class CreateOrderUtils {
 
@@ -24,21 +25,21 @@ public class CreateOrderUtils {
             @Override
             public void onSuccess(OrderBO s) {
                 progressUtils.stopProgress();
-                showPayDialog(s);
+                showPayDialog(s, musicBo);
             }
 
             @Override
             public void onFiled(String message) {
                 progressUtils.stopProgress();
-                ToastUtils.showShort(message);
+                new PayErrorDialog(AppManager.getAppManager().curremtActivity()).show();
             }
         });
     }
 
 
-    private static void showPayDialog(OrderBO orderBO) {
+    private static void showPayDialog(OrderBO orderBO, MusicBo musicBo) {
         Activity activity = AppManager.getAppManager().curremtActivity();
-        CreateOrderDialog dialog = new CreateOrderDialog(activity, orderBO);
+        CreateOrderDialog dialog = new CreateOrderDialog(activity, orderBO, musicBo);
         dialog.show();
     }
 

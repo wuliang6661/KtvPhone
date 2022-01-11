@@ -1,5 +1,6 @@
 package com.ipad.ktvphone.ui;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,13 +12,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -26,6 +20,7 @@ import com.ipad.ktvphone.R;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseFragment;
+import com.ipad.ktvphone.base.MyApplication;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.utils.CreateOrderUtils;
@@ -35,6 +30,18 @@ import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import rx.Observable;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 /**
  * 首页播放的fragment
@@ -54,6 +61,8 @@ public class HomeFragment extends BaseFragment {
     private TextView playingMusicName;
     private TextView playingMusicPerson;
 
+    LGRecycleViewAdapter<MusicBo> adapter;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,7 +79,7 @@ public class HomeFragment extends BaseFragment {
         initView();
         setTimeAdapter();
         getPlayList();
-        getPlayMusic();
+        lunxunPlaying();
         getTopSongs();
     }
 
@@ -85,6 +94,7 @@ public class HomeFragment extends BaseFragment {
         playingMusicImg = rootView.findViewById(R.id.playing_music_img);
         playingMusicName = rootView.findViewById(R.id.playing_music_name);
         playingMusicPerson = rootView.findViewById(R.id.playing_music_person);
+        rootView.findViewById(R.id.all_rank).setOnClickListener(v -> gotoActivity(RankingActivity.class, false));
         timeRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         timeRecycle.setNestedScrollingEnabled(false);
         rankList.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -92,6 +102,33 @@ public class HomeFragment extends BaseFragment {
         dataList1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList3.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+    }
+
+
+    private void lunxunPlaying() {
+        Observable.interval(0, 2, TimeUnit.SECONDS)
+                .observeOn(Schedulers.io())
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onCompleted() {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        getPlayMusic();
+                        long localRefreshTime = MyApplication.spUtils.getLong("localRefreshTime");
+                        if (System.currentTimeMillis() - localRefreshTime >= (2 * 60 * 60 * 1000)) {
+                            MyApplication.spUtils.put("localRefreshTime", System.currentTimeMillis());
+                            getPlayList();
+                            getTopSongs();
+                        }
+                    }
+                });
     }
 
 
@@ -122,14 +159,19 @@ public class HomeFragment extends BaseFragment {
                 if (musicBo == null || StringUtils.isEmpty(musicBo.song_name)) {
                     playingMusicName.setText("歌曲名：暂无");
                     playingMusicPerson.setText("歌手：暂无");
+                    playingMusicImg.setImageResource(R.mipmap.default_img);
                 } else {
                     Glide.with(getActivity()).load(musicBo.song_cover)
+                            .placeholder(R.mipmap.default_img)
+                            .error(R.mipmap.default_img)
                             .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                             .into(playingMusicImg);
                     playingMusicName.setText("歌曲名：" + musicBo.song_name);
                     playingMusicPerson.setText("歌手：" + musicBo.singer_name);
-                    Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-                    playingMusicBg.startAnimation(animation);
+                    if (playingMusicBg.getAnimation() == null || !playingMusicBg.getAnimation().hasStarted()) {
+                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                        playingMusicBg.startAnimation(animation);
+                    }
                 }
             }
 
@@ -180,7 +222,7 @@ public class HomeFragment extends BaseFragment {
 
 
     private void setRankingAdapter(List<MusicBo> musicBos) {
-        LGRecycleViewAdapter<MusicBo> adapter = new LGRecycleViewAdapter<MusicBo>(musicBos) {
+        adapter = new LGRecycleViewAdapter<MusicBo>(musicBos) {
             @Override
             public int getLayoutId(int viewType) {
                 return R.layout.item_ranking_music;
@@ -213,15 +255,28 @@ public class HomeFragment extends BaseFragment {
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
                 holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
+                        MusicPlayUtils.getInstance().getPlayingMusic().song_id.equals(musicBo.song_id)) {
+                    holder.setImageResurce(R.id.music_play_img, R.mipmap.stop_music);
+                } else {
+                    holder.setImageResurce(R.id.music_play_img, R.mipmap.music_start);
+                }
                 holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
+                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onClick(View v) {
-                        MusicPlayUtils.getInstance().startPlay(musicBo, new MusicPlayUtils.OnMusicFinishListener() {
-                            @Override
-                            public void onFinish(MusicBo musicBo) {
-
-                            }
-                        });
+                        if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
+                                MusicPlayUtils.getInstance().getPlayingMusic().song_id.equals(musicBo.song_id)) {
+                            MusicPlayUtils.getInstance().stopPlay();
+                        } else {
+                            MusicPlayUtils.getInstance().startPlay(musicBo, new MusicPlayUtils.OnMusicFinishListener() {
+                                @Override
+                                public void onFinish(MusicBo musicBo) {
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                        adapter.notifyDataSetChanged();
                     }
                 });
             }

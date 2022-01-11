@@ -31,13 +31,17 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MusicListActivity extends BaseActivity {
+/**
+ * 排行榜
+ */
+public class RankingActivity extends BaseActivity {
+
 
     private EditText editText;
     private RecyclerView musicList;
 
     List<MusicBo> musicData;
-    private int type;
+
 
     LGRecycleViewAdapter<MusicBo> adapter;
 
@@ -48,8 +52,9 @@ public class MusicListActivity extends BaseActivity {
         //取消状态栏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        return R.layout.act_music_list;
+        return R.layout.act_ranking_music;
     }
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,15 +65,8 @@ public class MusicListActivity extends BaseActivity {
         findViewById(R.id.go_back).setOnClickListener(v -> finish());
         musicList.setLayoutManager(new LinearLayoutManager(this));
         setListener();
-        type = getIntent().getExtras().getInt("type");
-        if (type == 0) {
-            String keyWord = getIntent().getExtras().getString("keyWord");
-            editText.setText(keyWord);
-            searchMusic(keyWord);
-        } else {
-            String songlist_id = getIntent().getExtras().getString("songlist_id");
-            getSongList(songlist_id);
-        }
+
+        getTopSongs();
     }
 
 
@@ -105,12 +103,13 @@ public class MusicListActivity extends BaseActivity {
     }
 
 
+
     /**
      * 获取歌单内部歌曲列表
      */
-    private void getSongList(String songlist_id) {
+    private void getTopSongs() {
         showProgress();
-        HttpServiceIml.getSongsList(0, songlist_id).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.getTopSongs(0).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> s) {
                 stopProgress();
@@ -127,11 +126,12 @@ public class MusicListActivity extends BaseActivity {
     }
 
 
+
     private void setAdapter() {
         adapter = new LGRecycleViewAdapter<MusicBo>(musicData) {
             @Override
             public int getLayoutId(int viewType) {
-                return R.layout.item_music;
+                return R.layout.item_ranking_music;
             }
 
             @Override
@@ -141,13 +141,13 @@ public class MusicListActivity extends BaseActivity {
                 positionNum.setTextColor(Color.parseColor("#ffffff"));
                 switch (position) {
                     case 0:
-                        positionNum.setBackground(ContextCompat.getDrawable(MusicListActivity.this, R.drawable.slide_da5d6f_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(RankingActivity.this, R.drawable.slide_da5d6f_conner_2_5_dp));
                         break;
                     case 1:
-                        positionNum.setBackground(ContextCompat.getDrawable(MusicListActivity.this, R.drawable.slide_55c0bb_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(RankingActivity.this, R.drawable.slide_55c0bb_conner_2_5_dp));
                         break;
                     case 2:
-                        positionNum.setBackground(ContextCompat.getDrawable(MusicListActivity.this, R.drawable.slide_8980ce_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(RankingActivity.this, R.drawable.slide_8980ce_conner_2_5_dp));
                         break;
                     default:
                         positionNum.setTextColor(Color.parseColor("#8B8B8B"));
@@ -156,7 +156,8 @@ public class MusicListActivity extends BaseActivity {
                 }
                 holder.setText(R.id.music_name, musicBo.song_name);
                 holder.setText(R.id.music_person, musicBo.singer_name);
-                Glide.with(MusicListActivity.this).load(musicBo.song_cover)
+                holder.setText(R.id.play_num, musicBo.play_count);
+                Glide.with(RankingActivity.this).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
                 holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));

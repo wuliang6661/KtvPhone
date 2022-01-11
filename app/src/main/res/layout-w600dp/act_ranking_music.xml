@@ -12,6 +12,7 @@
 
 
     <LinearLayout
+        android:id="@+id/go_back"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
         android:layout_marginLeft="6dp"
@@ -88,5 +89,10 @@
 
 
         </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/music_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
     </LinearLayout>
 </LinearLayout>

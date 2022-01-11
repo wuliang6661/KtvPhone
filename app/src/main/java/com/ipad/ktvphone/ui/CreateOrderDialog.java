@@ -15,6 +15,7 @@ import com.blankj.utilcode.util.SizeUtils;
 import com.ipad.ktvphone.R;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
+import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.entity.PayResultBo;
 import com.ipad.ktvphone.utils.ZxingUtils;
@@ -31,6 +32,7 @@ public class CreateOrderDialog extends PopupWindow {
 
     private Activity activity;
     private OrderBO orderBO;
+    private MusicBo musicBo;
     private View dialogView;
 
     private TextView count_down_time;
@@ -44,10 +46,11 @@ public class CreateOrderDialog extends PopupWindow {
     private CountDownTimer timer;
 
 
-    public CreateOrderDialog(Activity activity, OrderBO musicBo) {
+    public CreateOrderDialog(Activity activity, OrderBO orderBO, MusicBo musicBo) {
         super(activity);
         this.activity = activity;
-        this.orderBO = musicBo;
+        this.orderBO = orderBO;
+        this.musicBo = musicBo;
 
         dialogView = LayoutInflater.from(activity).inflate(R.layout.create_order_dialog, null);
         initView();
@@ -113,7 +116,17 @@ public class CreateOrderDialog extends PopupWindow {
                 }).subscribe(new HttpResultSubscriber<PayResultBo>() {
                     @Override
                     public void onSuccess(PayResultBo payResultBo) {
-
+                        switch (payResultBo.pay_result) {
+                            case "success":
+                                dismiss();
+                                new PaySuressDialog(activity).show();
+                                break;
+                            case "fail":
+                                dismiss();
+                                new PayRefundDialog(activity, musicBo).show();
+                                dismiss();
+                                break;
+                        }
                     }
 
                     @Override

@@ -18,6 +18,8 @@ public class MusicPlayUtils {
 
     private MediaPlayer mediaPlayer;
 
+    private MusicBo musicBo;
+
     public static MusicPlayUtils getInstance() {
         if (playUtils == null) {
             playUtils = new MusicPlayUtils();
@@ -41,8 +43,12 @@ public class MusicPlayUtils {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            new AudioMngHelper(AppManager.getAppManager().curremtActivity())
+                    .setVoice100(musicBo.volume);
         }
         try {
+            this.musicBo = musicBo;
+            mediaPlayer.reset();
             mediaPlayer.setDataSource(musicBo.play_url);
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(mp -> {
@@ -50,6 +56,7 @@ public class MusicPlayUtils {
             });
             mediaPlayer.setOnCompletionListener(mp -> {
                 LogUtils.e("播放完成");
+                stopPlay();
                 if (listener != null) {
                     listener.onFinish(musicBo);
                 }
@@ -60,11 +67,16 @@ public class MusicPlayUtils {
     }
 
 
+    public MusicBo getPlayingMusic() {
+        return musicBo;
+    }
+
     public void stopPlay() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release(); //切记一定要release
             mediaPlayer = null;
+            musicBo = null;
         }
     }
 

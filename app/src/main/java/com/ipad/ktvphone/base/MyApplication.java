@@ -3,6 +3,8 @@ package com.ipad.ktvphone.base;
 import android.app.Application;
 import android.content.Context;
 
+import com.blankj.utilcode.util.SPUtils;
+
 import androidx.multidex.MultiDex;
 
 import cat.ereza.customactivityoncrash.CustomActivityOnCrash;
@@ -17,10 +19,13 @@ public class MyApplication extends Application {
 
     private static final String TAG = "MyApplication";
 
+    public static SPUtils spUtils;
+
     @Override
     public void onCreate() {
         super.onCreate();
         CustomActivityOnCrash.install(this);
+        spUtils = SPUtils.getInstance("ktv_phone");
     }
 
     @Override
