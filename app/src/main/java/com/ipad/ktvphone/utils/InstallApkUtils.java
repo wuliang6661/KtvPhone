@@ -9,16 +9,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.util.logging.Logger;
 
 public class InstallApkUtils {
     public static Context mContext = null;
-    public static String sdPath = "/sdcard/update/update.apk";//下载sd路径
 
     //判断是否update目录下有文件
-    public static boolean isHasFile() {
+    public static boolean isHasFile(String currenttempfilepath) {
         try {
-            File f = new File(sdPath);
+            File f = new File(currenttempfilepath);
             if (!f.exists()) {
                 return false;
             }
@@ -27,7 +25,6 @@ public class InstallApkUtils {
         }
         return true;
     }
-
 
 
     /*
@@ -59,9 +56,8 @@ public class InstallApkUtils {
     }
 
 
-
     public static void excuteSuCMD(String currenttempfilepath) {
-        if (isHasFile()) {
+        if (isHasFile(currenttempfilepath)) {
             Process process = null;
             OutputStream out = null;
             InputStream in = null;
@@ -86,8 +82,6 @@ public class InstallApkUtils {
                         mContext.sendBroadcast(intent);
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
