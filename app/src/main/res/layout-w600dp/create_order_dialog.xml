@@ -51,6 +51,7 @@
 
 
         <ImageView
+            android:id="@+id/close_img"
             android:layout_width="14dp"
             android:layout_height="14dp"
             android:layout_marginLeft="5dp"
@@ -80,25 +81,58 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="22dp"
-                android:text="选择播放时段："
-                android:textColor="#717171"
-                android:textSize="22sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选择播放时段："
+                    android:textColor="#717171"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/playing_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="s'da'd'sa'd"
+                    android:textColor="#444444"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
 
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="22dp"
-                android:text="点播歌曲："
-                android:textColor="#717171"
-                android:textSize="22sp" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="点播歌曲："
+                    android:textColor="#717171"
+                    android:textSize="22sp" />
+
+
+                <TextView
+                    android:id="@+id/play_music_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="s'da'd'sa'd"
+                    android:textColor="#444444"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
 
 
         </LinearLayout>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.utils.AppManager;
 
@@ -17,10 +18,15 @@ import com.ipad.ktvphone.utils.AppManager;
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
+
+    private SVProgressHUD svProgressHUD;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayout());
+        svProgressHUD = new SVProgressHUD(this);
         AppManager.getAppManager().addActivity(this);
     }
 
@@ -51,7 +57,24 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    public void showToast(String message){
+    /**
+     * 显示加载进度弹窗
+     */
+    protected void showProgress() {
+        svProgressHUD.showWithStatus("加载中...", SVProgressHUD.SVProgressHUDMaskType.BlackCancel);
+    }
+
+    /**
+     * 停止弹窗
+     */
+    protected void stopProgress() {
+        if (svProgressHUD.isShowing()) {
+            svProgressHUD.dismiss();
+        }
+    }
+
+
+    public void showToast(String message) {
         ToastUtils.showShort(message);
     }
 

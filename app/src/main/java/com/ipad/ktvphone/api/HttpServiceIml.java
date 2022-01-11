@@ -1,6 +1,7 @@
 package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.MusicBo;
+import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
@@ -74,7 +75,7 @@ public class HttpServiceIml {
     /**
      * 生成支付订单
      */
-    public static Observable<String> createPayOrder(MusicBo musicBo) {
+    public static Observable<OrderBO> createPayOrder(MusicBo musicBo) {
         return getService().onDemandSongCommit(UUID.randomUUID().toString(),
                 musicBo.song_id,
                 musicBo.song_name,

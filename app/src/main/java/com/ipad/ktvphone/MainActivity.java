@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity {
      * 建立心跳连接
      */
     private void startHeartbeat() {
-        Observable.interval(0, 5000, TimeUnit.MILLISECONDS)
+        Observable.interval(0, 2, TimeUnit.MINUTES)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {

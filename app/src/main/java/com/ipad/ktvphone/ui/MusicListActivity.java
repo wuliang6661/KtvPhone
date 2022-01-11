@@ -2,6 +2,7 @@ package com.ipad.ktvphone.ui;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -17,6 +18,7 @@ import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseActivity;
 import com.ipad.ktvphone.entity.MusicBo;
+import com.ipad.ktvphone.utils.CreateOrderUtils;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
@@ -147,6 +149,7 @@ public class MusicListActivity extends BaseActivity {
                 Glide.with(MusicListActivity.this).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
+                holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
             }
         };
         musicList.setAdapter(adapter);

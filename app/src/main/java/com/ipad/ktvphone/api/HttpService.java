@@ -2,6 +2,7 @@ package com.ipad.ktvphone.api;
 
 import com.ipad.ktvphone.entity.BaseResult;
 import com.ipad.ktvphone.entity.MusicBo;
+import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.entity.PlayListBO;
 import com.ipad.ktvphone.entity.VersionBO;
 
@@ -67,12 +68,12 @@ public interface HttpService {
      */
     @FormUrlEncoded
     @POST("/on_demand_songs/api/v1/create_pay_order")
-    Observable<BaseResult<String>> onDemandSongCommit(@Field("request_id") String request_id,
-                                                      @Field("song_id") String song_id,
-                                                      @Field("song_name") String song_name,
-                                                      @Field("song_cover") String song_cover,
-                                                      @Field("singer_name") String singer_name,
-                                                      @Field("play_url") String play_url);
+    Observable<BaseResult<OrderBO>> onDemandSongCommit(@Field("request_id") String request_id,
+                                                       @Field("song_id") String song_id,
+                                                       @Field("song_name") String song_name,
+                                                       @Field("song_cover") String song_cover,
+                                                       @Field("singer_name") String singer_name,
+                                                       @Field("play_url") String play_url);
 
 
     /**
