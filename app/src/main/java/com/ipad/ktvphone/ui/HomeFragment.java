@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,6 +40,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -169,8 +172,11 @@ public class HomeFragment extends BaseFragment {
                     playingMusicName.setText("歌曲名：" + musicBo.song_name);
                     playingMusicPerson.setText("歌手：" + musicBo.singer_name);
                     if (playingMusicBg.getAnimation() == null || !playingMusicBg.getAnimation().hasStarted()) {
-                        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-                        playingMusicBg.startAnimation(animation);
+                        RotateAnimation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+                        rotateAnimation.setInterpolator(new LinearInterpolator());
+                        rotateAnimation.setDuration(8000);
+                        rotateAnimation.setRepeatCount(Animation.INFINITE);
+                        playingMusicBg.startAnimation(rotateAnimation);
                     }
                 }
             }
