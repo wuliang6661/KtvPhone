@@ -103,7 +103,6 @@ public class RankingActivity extends BaseActivity {
     }
 
 
-
     /**
      * 获取歌单内部歌曲列表
      */
@@ -126,7 +125,6 @@ public class RankingActivity extends BaseActivity {
     }
 
 
-
     private void setAdapter() {
         adapter = new LGRecycleViewAdapter<MusicBo>(musicData) {
             @Override
@@ -134,6 +132,7 @@ public class RankingActivity extends BaseActivity {
                 return R.layout.item_ranking_music;
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void convert(LGViewHolder holder, MusicBo musicBo, int position) {
                 TextView positionNum = (TextView) holder.getView(R.id.list_num);
@@ -160,7 +159,11 @@ public class RankingActivity extends BaseActivity {
                 Glide.with(RankingActivity.this).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
-                holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                holder.getView(R.id.create_order).setOnClickListener(v -> {
+                    MusicPlayUtils.getInstance().stopPlay();
+                    adapter.notifyDataSetChanged();
+                    CreateOrderUtils.createOrder(musicBo);
+                });
                 if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
                         MusicPlayUtils.getInstance().getPlayingMusic().song_id.equals(musicBo.song_id)) {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.stop_music);
@@ -168,7 +171,6 @@ public class RankingActivity extends BaseActivity {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.music_start);
                 }
                 holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onClick(View v) {
                         if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
@@ -190,6 +192,11 @@ public class RankingActivity extends BaseActivity {
         musicList.setAdapter(adapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MusicPlayUtils.getInstance().stopPlay();
+    }
 
     private String getNum(int position) {
         int num = position + 1;

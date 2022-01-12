@@ -228,6 +228,7 @@ public class HomeFragment extends BaseFragment {
                 return R.layout.item_ranking_music;
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void convert(LGViewHolder holder, MusicBo musicBo, int position) {
                 TextView positionNum = (TextView) holder.getView(R.id.list_num);
@@ -254,7 +255,11 @@ public class HomeFragment extends BaseFragment {
                 Glide.with(getActivity()).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
-                holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                holder.getView(R.id.create_order).setOnClickListener(v -> {
+                    MusicPlayUtils.getInstance().stopPlay();
+                    adapter.notifyDataSetChanged();
+                    CreateOrderUtils.createOrder(musicBo);
+                });
                 if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
                         MusicPlayUtils.getInstance().getPlayingMusic().song_id.equals(musicBo.song_id)) {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.stop_music);
@@ -262,7 +267,6 @@ public class HomeFragment extends BaseFragment {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.music_start);
                 }
                 holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onClick(View v) {
                         if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&

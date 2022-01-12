@@ -134,6 +134,7 @@ public class MusicListActivity extends BaseActivity {
                 return R.layout.item_music;
             }
 
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void convert(LGViewHolder holder, MusicBo musicBo, int position) {
                 TextView positionNum = (TextView) holder.getView(R.id.list_num);
@@ -159,7 +160,11 @@ public class MusicListActivity extends BaseActivity {
                 Glide.with(MusicListActivity.this).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
-                holder.getView(R.id.create_order).setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
+                holder.getView(R.id.create_order).setOnClickListener(v -> {
+                    MusicPlayUtils.getInstance().stopPlay();
+                    adapter.notifyDataSetChanged();
+                    CreateOrderUtils.createOrder(musicBo);
+                });
                 if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
                         MusicPlayUtils.getInstance().getPlayingMusic().song_id.equals(musicBo.song_id)) {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.stop_music);
@@ -167,7 +172,6 @@ public class MusicListActivity extends BaseActivity {
                     holder.setImageResurce(R.id.music_play_img, R.mipmap.music_start);
                 }
                 holder.getView(R.id.play_music).setOnClickListener(new View.OnClickListener() {
-                    @SuppressLint("NotifyDataSetChanged")
                     @Override
                     public void onClick(View v) {
                         if (MusicPlayUtils.getInstance().getPlayingMusic() != null &&
@@ -189,6 +193,11 @@ public class MusicListActivity extends BaseActivity {
         musicList.setAdapter(adapter);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        MusicPlayUtils.getInstance().stopPlay();
+    }
 
     private String getNum(int position) {
         int num = position + 1;
