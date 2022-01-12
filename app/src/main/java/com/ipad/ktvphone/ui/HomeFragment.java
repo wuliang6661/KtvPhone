@@ -122,7 +122,7 @@ public class HomeFragment extends BaseFragment {
                     public void onNext(Long aLong) {
                         getPlayMusic();
                         long localRefreshTime = MyApplication.spUtils.getLong("localRefreshTime");
-                        if (System.currentTimeMillis() - localRefreshTime >= (2 * 60 * 60 * 1000)) {
+                        if (System.currentTimeMillis() - localRefreshTime >= (2 * 60 * 1000)) {
                             MyApplication.spUtils.put("localRefreshTime", System.currentTimeMillis());
                             getPlayList();
                             getTopSongs();
