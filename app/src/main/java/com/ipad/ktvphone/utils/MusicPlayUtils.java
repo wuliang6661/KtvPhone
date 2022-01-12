@@ -4,6 +4,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.StringUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.entity.MusicBo;
 
 import java.io.IOException;
@@ -48,6 +50,10 @@ public class MusicPlayUtils {
         }
         try {
             this.musicBo = musicBo;
+            if (StringUtils.isEmpty(musicBo.play_url)) {
+                ToastUtils.showShort("播放地址为空！");
+                return;
+            }
             mediaPlayer.reset();
             mediaPlayer.setDataSource(musicBo.play_url);
             mediaPlayer.prepareAsync();
