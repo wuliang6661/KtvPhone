@@ -49,11 +49,11 @@ public class MusicPlayUtils {
                     .setVoice100(musicBo.volume);
         }
         try {
-            this.musicBo = musicBo;
             if (StringUtils.isEmpty(musicBo.play_url)) {
                 ToastUtils.showShort("播放地址为空！");
                 return;
             }
+            this.musicBo = musicBo;
             mediaPlayer.reset();
             mediaPlayer.setDataSource(musicBo.play_url);
             mediaPlayer.prepareAsync();
