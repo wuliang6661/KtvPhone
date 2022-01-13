@@ -8,6 +8,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import androidx.annotation.Nullable;
+
 import com.blankj.utilcode.util.FragmentUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
@@ -28,7 +30,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.Nullable;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -52,7 +53,7 @@ public class MainActivity extends BaseActivity {
         setListener();
 
         searchDialog = new SearchFragment();
-        FragmentUtils.replace(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
+        FragmentUtils.add(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
         RootUtils.upgradeRootPermission(getPackageCodePath());
         startHeartbeat();
     }
@@ -153,51 +154,4 @@ public class MainActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
-    private void requestMsg() {
-//        Observable.interval(0, retryInterval, TimeUnit.MILLISECONDS)
-//                .take(retryCount)
-//                .observeOn(Schedulers.io())
-//                .subscribeOn(AndroidSchedulers.mainThread())
-//                .flatMap((Function<Long, DsmObservable<CMSResultBean<QueryOrderResultBean>>>) aLong -> cmsService.queryCreateOrderResult(id))
-//                .takeUntil(rsp -> {
-//                    QueryOrderResultBean item = rsp.item;
-//                    return item.status != 1;
-//                })
-//                .subscribe(new Observer<>() {
-//                    @Override
-//                    public void onSubscribe(@NonNull Disposable d) {
-//                        add(d);
-//                    }
-//
-//                    @Override
-//                    public void onNext(@NonNull CMSResultBean<QueryOrderResultBean> rsp) {
-//                        QueryOrderResultBean item = rsp.item;
-//                        if (item.status == 2 && !TextUtils.isEmpty(item.id)) {
-//                            createOrderSuccess(item.id);
-//                            mView.cancelProgressDialog();
-//                        } else if (!TextUtils.isEmpty(item.errMsg)) {
-//                            mView.cancelProgressDialog();
-//                            if (item.errorCode == 12114) {   //存在未支付的订单
-//                                mView.existDrugOrder(item.errMsg);
-//                                return;
-//                            } else if (item.errorCode == 10020) {   //药品状态存在变化/下架/库存不足
-//                                mView.showToastMessage("药品状态存在变化");
-//                                getSkuList();
-//                                return;
-//                            }
-//                            mView.showToastMessage(item.errMsg);
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onError(@NonNull Throwable e) {
-//                        mView.cancelProgressDialog();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        mView.cancelProgressDialog();
-//                    }
-//                });
-    }
 }
