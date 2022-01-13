@@ -108,7 +108,7 @@ public class HomeFragment extends BaseFragment {
 
 
     private void lunxunPlaying() {
-        Observable.interval(0, 2, TimeUnit.SECONDS)
+        Observable.interval(0, 10, TimeUnit.SECONDS)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
