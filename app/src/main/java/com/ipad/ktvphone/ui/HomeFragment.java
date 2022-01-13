@@ -294,6 +294,13 @@ public class HomeFragment extends BaseFragment {
         rankList.setAdapter(adapter);
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onPause() {
+        super.onPause();
+        adapter.notifyDataSetChanged();
+        MusicPlayUtils.getInstance().stopPlay();
+    }
 
     private void setRecommendAdapter(PlayListBO listBO) {
         dataList1.setAdapter(new RecommendAdapter(listBO.data1));

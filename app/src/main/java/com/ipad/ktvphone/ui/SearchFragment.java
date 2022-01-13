@@ -60,6 +60,7 @@ public class SearchFragment extends BaseFragment {
             bundle.putInt("type", 0);
             bundle.putString("keyWord", keyWord);
             gotoActivity(MusicListActivity.class, bundle, false);
+            EventBus.getDefault().post(new HideSearchEvent());
         });
     }
 
