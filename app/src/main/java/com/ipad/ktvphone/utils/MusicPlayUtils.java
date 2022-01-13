@@ -67,8 +67,19 @@ public class MusicPlayUtils {
                     listener.onFinish(musicBo);
                 }
             });
+            mediaPlayer.setOnErrorListener((mp, what, extra) -> {
+                stopPlay();
+                if (listener != null) {
+                    listener.onFinish(musicBo);
+                }
+                return false;
+            });
         } catch (IOException e) {
             e.printStackTrace();
+            stopPlay();
+            if (listener != null) {
+                listener.onFinish(musicBo);
+            }
         }
     }
 
