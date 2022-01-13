@@ -171,7 +171,7 @@ public class RankingActivity extends BaseActivity {
         adapter = new LGRecycleViewAdapter<MusicBo>(musicData) {
             @Override
             public int getLayoutId(int viewType) {
-                return R.layout.item_ranking_music;
+                return R.layout.item_ranking_music_big;
             }
 
             @SuppressLint("NotifyDataSetChanged")

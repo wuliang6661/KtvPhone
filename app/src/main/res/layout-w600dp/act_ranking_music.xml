@@ -86,28 +86,19 @@
                 android:textStyle="bold" />
 
 
-            <LinearLayout
-                android:id="@+id/all_rank"
-                android:layout_width="48dp"
-                android:layout_height="wrap_content"
-                android:gravity="right|center_vertical"
-                android:visibility="invisible">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="全部"
-                    android:textColor="#393939"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-                <ImageView
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
-                    android:layout_marginLeft="4dp"
-                    android:src="@mipmap/all_img" />
-
-            </LinearLayout>
+            <TextView
+                android:id="@+id/create_order"
+                android:layout_width="wrap_content"
+                android:layout_height="33dp"
+                android:layout_marginLeft="36dp"
+                android:background="@drawable/slide_ff8000_conner_5dp"
+                android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:text="点播"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:visibility="invisible" />
 
 
         </LinearLayout>
@@ -115,7 +106,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/music_list"
             android:layout_width="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp" />
     </LinearLayout>
 </LinearLayout>
