@@ -31,6 +31,7 @@ import com.ipad.ktvphone.base.BaseFragment;
 import com.ipad.ktvphone.base.MyApplication;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.PlayListBO;
+import com.ipad.ktvphone.utils.AppManager;
 import com.ipad.ktvphone.utils.CreateOrderUtils;
 import com.ipad.ktvphone.utils.MusicPlayUtils;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
@@ -163,7 +164,7 @@ public class HomeFragment extends BaseFragment {
                     playingMusicPerson.setText("歌手：暂无");
                     playingMusicImg.setImageResource(R.mipmap.default_img);
                 } else {
-                    Glide.with(getActivity()).load(musicBo.song_cover)
+                    Glide.with(AppManager.getAppManager().curremtActivity()).load(musicBo.song_cover)
                             .placeholder(R.mipmap.default_img)
                             .error(R.mipmap.default_img)
                             .apply(RequestOptions.bitmapTransform(new CircleCrop()))
@@ -241,13 +242,13 @@ public class HomeFragment extends BaseFragment {
                 positionNum.setTextColor(Color.parseColor("#ffffff"));
                 switch (position) {
                     case 0:
-                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_da5d6f_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(AppManager.getAppManager().curremtActivity(), R.drawable.slide_da5d6f_conner_2_5_dp));
                         break;
                     case 1:
-                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_55c0bb_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(AppManager.getAppManager().curremtActivity(), R.drawable.slide_55c0bb_conner_2_5_dp));
                         break;
                     case 2:
-                        positionNum.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.slide_8980ce_conner_2_5_dp));
+                        positionNum.setBackground(ContextCompat.getDrawable(AppManager.getAppManager().curremtActivity(), R.drawable.slide_8980ce_conner_2_5_dp));
                         break;
                     default:
                         positionNum.setTextColor(Color.parseColor("#8B8B8B"));
@@ -257,7 +258,7 @@ public class HomeFragment extends BaseFragment {
                 holder.setText(R.id.music_name, musicBo.song_name);
                 holder.setText(R.id.music_person, musicBo.singer_name);
                 holder.setText(R.id.play_num, musicBo.play_count);
-                Glide.with(getActivity()).load(musicBo.song_cover)
+                Glide.with(AppManager.getAppManager().curremtActivity()).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
                         .into((ImageView) holder.getView(R.id.music_img));
                 holder.getView(R.id.create_order).setOnClickListener(v -> {
