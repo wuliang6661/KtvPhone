@@ -11,6 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
@@ -21,15 +26,12 @@ import com.ipad.ktvphone.base.BaseActivity;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.utils.CreateOrderUtils;
 import com.ipad.ktvphone.utils.MusicPlayUtils;
+import com.ipad.ktvphone.weight.OnRecyclerViewScrollListener;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * 排行榜
@@ -41,9 +43,12 @@ public class RankingActivity extends BaseActivity {
     private RecyclerView musicList;
 
     List<MusicBo> musicData;
-
-
     LGRecycleViewAdapter<MusicBo> adapter;
+
+    private int from = 0;
+
+    //1 为排行榜搜索， 0 是输入框搜索
+    private int type = 1;
 
     @Override
     protected int getLayout() {
@@ -66,6 +71,8 @@ public class RankingActivity extends BaseActivity {
         musicList.setLayoutManager(new LinearLayoutManager(this));
         setListener();
 
+        musicData = new ArrayList<>();
+        type = 1;
         getTopSongs();
     }
 
@@ -74,10 +81,23 @@ public class RankingActivity extends BaseActivity {
         editText.setOnEditorActionListener((v, actionId, event) -> {
             boolean handled = false;
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                from = 0;
+                type = 0;
                 searchMusic(editText.getText().toString());
                 handled = true;
             }
             return handled;
+        });
+        musicList.addOnScrollListener(new OnRecyclerViewScrollListener() {
+            @Override
+            public void onBottom() {
+                from++;
+                if (type == 0) {
+                    searchMusic(editText.getText().toString());
+                } else {
+                    getTopSongs();
+                }
+            }
         });
     }
 
@@ -86,16 +106,25 @@ public class RankingActivity extends BaseActivity {
      */
     private void searchMusic(String keyWord) {
         showProgress();
-        HttpServiceIml.searchMusic(0, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.searchMusic(from, keyWord).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> musicBos) {
                 stopProgress();
-                musicData = musicBos;
+                if (from == 0) {
+                    musicData.clear();
+                }
+                if (from != 0 && musicBos.isEmpty()) {
+                    from--;
+                }
+                musicData.addAll(musicBos);
                 setAdapter();
             }
 
             @Override
             public void onFiled(String message) {
+                if (from != 0) {
+                    from--;
+                }
                 stopProgress();
                 showToast(message);
             }
@@ -108,16 +137,25 @@ public class RankingActivity extends BaseActivity {
      */
     private void getTopSongs() {
         showProgress();
-        HttpServiceIml.getTopSongs(0).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.getTopSongs(from).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> s) {
                 stopProgress();
-                musicData = s;
+                if (from == 0) {
+                    musicData.clear();
+                }
+                if (from != 0 && s.isEmpty()) {
+                    from--;
+                }
+                musicData.addAll(s);
                 setAdapter();
             }
 
             @Override
             public void onFiled(String message) {
+                if (from != 0) {
+                    from--;
+                }
                 stopProgress();
                 showToast(message);
             }
@@ -126,6 +164,10 @@ public class RankingActivity extends BaseActivity {
 
 
     private void setAdapter() {
+        if (adapter != null) {
+            adapter.setData(musicData);
+            return;
+        }
         adapter = new LGRecycleViewAdapter<MusicBo>(musicData) {
             @Override
             public int getLayoutId(int viewType) {

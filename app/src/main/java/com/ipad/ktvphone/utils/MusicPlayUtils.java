@@ -45,14 +45,14 @@ public class MusicPlayUtils {
         if (mediaPlayer == null) {
             mediaPlayer = new MediaPlayer();
             mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            new AudioMngHelper(AppManager.getAppManager().curremtActivity())
-                    .setVoice100(musicBo.volume);
         }
         try {
             if (StringUtils.isEmpty(musicBo.play_url)) {
                 ToastUtils.showShort("播放地址为空！");
                 return;
             }
+            new AudioMngHelper(AppManager.getAppManager().curremtActivity())
+                    .setVoice100(musicBo.volume);
             this.musicBo = musicBo;
             mediaPlayer.reset();
             mediaPlayer.setDataSource(musicBo.play_url);
