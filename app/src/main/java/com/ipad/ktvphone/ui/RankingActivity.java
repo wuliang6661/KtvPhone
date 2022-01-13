@@ -137,7 +137,7 @@ public class RankingActivity extends BaseActivity {
      */
     private void getTopSongs() {
         showProgress();
-        HttpServiceIml.getTopSongs(from).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.getTopSongs(from,20).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> s) {
                 stopProgress();

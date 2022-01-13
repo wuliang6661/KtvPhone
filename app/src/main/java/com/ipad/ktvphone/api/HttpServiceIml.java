@@ -75,7 +75,7 @@ public class HttpServiceIml {
     /**
      * 获取排行榜歌曲
      */
-    public static Observable<List<MusicBo>> getTopSongs(int limit) {
+    public static Observable<List<MusicBo>> getTopSongs(int limit,int from) {
         return getService().getTopSongs(limit, 20).compose(RxResultHelper.httpRusult());
     }
 

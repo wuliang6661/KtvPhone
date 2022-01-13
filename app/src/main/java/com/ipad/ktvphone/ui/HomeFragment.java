@@ -101,6 +101,7 @@ public class HomeFragment extends BaseFragment {
         timeRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         timeRecycle.setNestedScrollingEnabled(false);
         rankList.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rankList.setNestedScrollingEnabled(false);
 
         dataList1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
@@ -193,7 +194,7 @@ public class HomeFragment extends BaseFragment {
      * 获取排行榜歌曲
      */
     private void getTopSongs() {
-        HttpServiceIml.getTopSongs(0).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
+        HttpServiceIml.getTopSongs(0, 10).subscribe(new HttpResultSubscriber<List<MusicBo>>() {
             @Override
             public void onSuccess(List<MusicBo> musicBos) {
                 setRankingAdapter(musicBos);
