@@ -53,7 +53,7 @@ public class HttpServiceIml {
      * 搜索歌曲
      */
     public static Observable<List<MusicBo>> searchMusic(int limit, String keyWord) {
-        return getService().searchMusic(limit, 1000, keyWord).compose(RxResultHelper.httpRusult());
+        return getService().searchMusic(limit, 20, keyWord).compose(RxResultHelper.httpRusult());
     }
 
 
@@ -61,7 +61,7 @@ public class HttpServiceIml {
      * 获取歌单内部歌曲
      */
     public static Observable<List<MusicBo>> getSongsList(int limit, String keyWord) {
-        return getService().getSongsList(limit, 1000, keyWord).compose(RxResultHelper.httpRusult());
+        return getService().getSongsList(limit, 20, keyWord).compose(RxResultHelper.httpRusult());
     }
 
 
@@ -76,7 +76,7 @@ public class HttpServiceIml {
      * 获取排行榜歌曲
      */
     public static Observable<List<MusicBo>> getTopSongs(int limit) {
-        return getService().getTopSongs(limit, 1000).compose(RxResultHelper.httpRusult());
+        return getService().getTopSongs(limit, 20).compose(RxResultHelper.httpRusult());
     }
 
 
