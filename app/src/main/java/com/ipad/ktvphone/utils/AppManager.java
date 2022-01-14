@@ -44,8 +44,7 @@ public class AppManager {
 
 
     public Activity curremtActivity() {
-        Activity activity = activityStack.lastElement();
-        return activity;
+        return activityStack.lastElement();
     }
 
 

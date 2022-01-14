@@ -100,8 +100,13 @@ public class HomeFragment extends BaseFragment {
         rootView.findViewById(R.id.all_rank).setOnClickListener(v -> gotoActivity(RankingActivity.class, false));
         timeRecycle.setLayoutManager(new GridLayoutManager(getActivity(), 4));
         timeRecycle.setNestedScrollingEnabled(false);
-        rankList.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rankList.setNestedScrollingEnabled(false);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        rankList.setLayoutManager(linearLayoutManager);
 
         dataList1.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         dataList2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
