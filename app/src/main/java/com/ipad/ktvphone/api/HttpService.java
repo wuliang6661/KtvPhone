@@ -33,7 +33,7 @@ public interface HttpService {
      */
     @FormUrlEncoded
     @POST("/on_demand_songs/api/v1/heartbeat")
-    Observable<BaseResult<VersionBO>> postHeartbeat(@Field("data") String data, @Field("time") long time);
+    Observable<BaseResult<VersionBO>> postHeartbeat(@Field("data") String data, @Field("time") long time, @Field("version") int version);
 
 
     /**

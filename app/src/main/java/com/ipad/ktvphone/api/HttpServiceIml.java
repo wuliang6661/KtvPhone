@@ -1,5 +1,6 @@
 package com.ipad.ktvphone.api;
 
+import com.blankj.utilcode.util.AppUtils;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.OrderBO;
 import com.ipad.ktvphone.entity.PayResultBo;
@@ -37,7 +38,7 @@ public class HttpServiceIml {
      * 心跳连接
      */
     public static Observable<VersionBO> postHeartbeat() {
-        return getService().postHeartbeat("online", System.currentTimeMillis()).compose(RxResultHelper.httpRusult());
+        return getService().postHeartbeat("online", System.currentTimeMillis(), AppUtils.getAppVersionCode()).compose(RxResultHelper.httpRusult());
     }
 
 
@@ -75,7 +76,7 @@ public class HttpServiceIml {
     /**
      * 获取排行榜歌曲
      */
-    public static Observable<List<MusicBo>> getTopSongs(int limit,int from) {
+    public static Observable<List<MusicBo>> getTopSongs(int limit, int from) {
         return getService().getTopSongs(limit, 20).compose(RxResultHelper.httpRusult());
     }
 
