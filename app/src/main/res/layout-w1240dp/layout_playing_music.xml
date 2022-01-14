@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    tools:ignore="MissingDefaultResource">
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:includeFontPadding="false"
+            android:text="正在播放的歌曲："
+            android:textColor="#565656"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+
+        <FrameLayout
+            android:id="@+id/playing_music_bg"
+            android:layout_width="107dp"
+            android:layout_height="107dp"
+            android:layout_below="@id/title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13dp"
+            android:background="@mipmap/playing_music_bg">
+
+            <ImageView
+                android:id="@+id/playing_music_img"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+
+        <TextView
+            android:id="@+id/playing_music_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/playing_music_bg"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="13dp"
+            android:includeFontPadding="false"
+            android:text="歌曲名：暂无"
+            android:textColor="#616161"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/playing_music_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/playing_music_name"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="8dp"
+            android:includeFontPadding="false"
+            android:text="歌手：暂无"
+            android:textColor="#616161"
+            android:textSize="11sp" />
+
+
+        <ImageView
+            android:layout_width="139dp"
+            android:layout_height="51dp"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/gongzhonghao_img" />
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/time_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginLeft="7dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginRight="14dp"
+            android:layout_weight="1" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+
+            <View
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:background="@drawable/clier_cccccc" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="排位满"
+                android:textColor="#cccccc"
+                android:textSize="7sp" />
+
+
+            <View
+                android:layout_width="9dp"
+                android:layout_height="9dp"
+                android:layout_marginLeft="36dp"
+                android:background="@drawable/clier_fa8c16" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="可点歌"
+                android:textColor="#FA8C16"
+                android:textSize="7sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

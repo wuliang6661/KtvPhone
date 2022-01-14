@@ -3,85 +3,30 @@
     android:id="@+id/activity_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#F5F8FF"
     android:orientation="vertical">
 
 
-    <LinearLayout
+    <include layout="@layout/layout_header_view" />
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:background="@color/white"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
 
         <FrameLayout
-            android:layout_width="335dp"
+            android:id="@+id/container_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <FrameLayout
+            android:id="@+id/search_fragment"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ff8000">
+            android:visibility="gone" />
 
+    </FrameLayout>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@mipmap/left_logo" />
-
-        </FrameLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical">
-
-
-            <EditText
-                android:layout_width="800dp"
-                android:layout_height="49dp"
-                android:layout_marginLeft="47dp"
-                android:background="@drawable/slide_f4f7fd_conner_25"
-                android:drawableLeft="@mipmap/search_left"
-                android:drawablePadding="13dp"
-                android:gravity="center_vertical"
-                android:hint="搜索歌曲，输入歌曲/歌手名称关键词"
-                android:paddingLeft="32dp"
-                android:textColor="#373737"
-                android:textColorHint="#A9A8CB"
-                android:textSize="16sp" />
-
-
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1.2"
-            android:orientation="vertical">
-
-
-
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-
-        </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>
