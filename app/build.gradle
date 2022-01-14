@@ -10,7 +10,6 @@ android {
         targetSdkVersion 30
         versionCode 200
         versionName "2.0.0"
-        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
