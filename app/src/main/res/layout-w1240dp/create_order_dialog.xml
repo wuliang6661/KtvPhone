@@ -29,7 +29,7 @@
             android:layout_marginLeft="6dp"
             android:layout_weight="1"
             android:text="*只能预约点播当天歌曲哦~ 预约播放的时间范围内按照预约顺序播放"
-            android:textColor="#676767"
+            android:textColor="#FF0909"
             android:textSize="13sp" />
 
 
@@ -92,7 +92,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="选择播放时段："
+                    android:text="预计播放时间："
                     android:textColor="#717171"
                     android:textSize="22sp" />
 

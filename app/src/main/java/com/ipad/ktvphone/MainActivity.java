@@ -7,9 +7,9 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
-import androidx.annotation.Nullable;
-
+import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.FragmentUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
@@ -30,6 +30,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.Nullable;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -42,6 +43,7 @@ public class MainActivity extends BaseActivity {
     private SearchFragment searchDialog;
 
     private FrameLayout searchFragment;
+    private TextView versionName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +52,8 @@ public class MainActivity extends BaseActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         editText = findViewById(R.id.edit_view);
         searchFragment = findViewById(R.id.search_fragment);
+        versionName = findViewById(R.id.version_name);
+        versionName.setText(AppUtils.getAppVersionName());
         setListener();
 
         searchDialog = new SearchFragment();

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.blankj.utilcode.util.ToastUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -82,6 +84,7 @@ public class InstallApkUtils {
                         mContext.sendBroadcast(intent);
                     }
                 }
+                reboot();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -99,6 +102,21 @@ public class InstallApkUtils {
             }
         } else {
             Log.e("install", "apk is not exist");
+            ToastUtils.showShort("没有找到更新的apk包！");
         }
     }
+
+
+    /**
+     * 重启机器
+     */
+    private static void reboot() {
+        try {
+//            Runtime.getRuntime().exec("su");
+            Runtime.getRuntime().exec("reboot");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

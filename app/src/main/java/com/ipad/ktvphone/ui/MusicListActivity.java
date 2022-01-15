@@ -54,7 +54,7 @@ public class MusicListActivity extends BaseActivity {
         //取消标题
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         //取消状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         return R.layout.act_music_list;
     }
