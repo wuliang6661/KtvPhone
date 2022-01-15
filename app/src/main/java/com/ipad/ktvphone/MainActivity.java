@@ -1,6 +1,9 @@
 package com.ipad.ktvphone;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,8 +23,7 @@ import com.ipad.ktvphone.entity.event.HideSearchEvent;
 import com.ipad.ktvphone.entity.event.SearchMusicEvent;
 import com.ipad.ktvphone.ui.HomeFragment;
 import com.ipad.ktvphone.ui.SearchFragment;
-import com.ipad.ktvphone.utils.RootUtils;
-import com.ipad.ktvphone.utils.UpdateUtils;
+import com.ipad.ktvphone.weight.OnDoubleClickListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -45,6 +47,7 @@ public class MainActivity extends BaseActivity {
     private FrameLayout searchFragment;
     private TextView versionName;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +57,15 @@ public class MainActivity extends BaseActivity {
         searchFragment = findViewById(R.id.search_fragment);
         versionName = findViewById(R.id.version_name);
         versionName.setText("当前版本：v" + AppUtils.getAppVersionName());
+        versionName.setOnTouchListener(new OnDoubleClickListener(() -> {
+            Intent intent = new Intent(Settings.ACTION_SETTINGS);
+            startActivity(intent);
+        }));
         setListener();
 
         searchDialog = new SearchFragment();
         FragmentUtils.add(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
-        RootUtils.upgradeRootPermission(getPackageCodePath());
+//        RootUtils.upgradeRootPermission(getPackageCodePath());
         startHeartbeat();
     }
 
@@ -136,7 +143,7 @@ public class MainActivity extends BaseActivity {
         HttpServiceIml.postHeartbeat().subscribe(new HttpResultSubscriber<VersionBO>() {
             @Override
             public void onSuccess(VersionBO s) {
-                new UpdateUtils().checkUpdate(MainActivity.this, s);
+//                new UpdateUtils().checkUpdate(MainActivity.this, s);
             }
 
             @Override

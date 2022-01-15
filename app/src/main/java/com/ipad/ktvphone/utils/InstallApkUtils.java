@@ -68,7 +68,7 @@ public class InstallApkUtils {
                 process = Runtime.getRuntime().exec("su");
                 out = process.getOutputStream();
                 //调用安装
-                out.write(("pm install -r " + currenttempfilepath + "\n").getBytes());
+                out.write(("pm install -i com.ipad.ktvphone -r " + currenttempfilepath + "\n").getBytes());
                 in = process.getInputStream();
                 int len = 0;
                 byte[] bs = new byte[256];

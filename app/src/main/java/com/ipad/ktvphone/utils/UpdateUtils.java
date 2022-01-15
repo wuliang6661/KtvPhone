@@ -108,8 +108,8 @@ public class UpdateUtils {
                                 handler.sendEmptyMessage(0x22);
 //                                AppUtils.installApp(apkFile);
                                 LogUtils.e(apkFile.getAbsolutePath());
-                                startUpdate(apkFile.getAbsolutePath());
-//                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
+//                                startUpdate(apkFile.getAbsolutePath());
+                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
                                 break;
                             }
                             fos.write(buffer, 0, numread);
