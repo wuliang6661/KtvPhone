@@ -7,21 +7,25 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+import android.util.Log;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.config.FileConfig;
 import com.ipad.ktvphone.entity.VersionBO;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
 /**
@@ -34,10 +38,11 @@ import javax.net.ssl.HttpsURLConnection;
 public class UpdateUtils {
 
 
+    private static final String TAG = "UpdateUtils";
     private Activity context;
 
     private boolean mIsCancel = false;
-    private String version = "teach.apk";
+    private final String apkName = "box_project.apk";
 
     public void checkUpdate(Activity context, VersionBO versionBO) {
         this.context = context;
@@ -86,7 +91,7 @@ public class UpdateUtils {
                         InputStream is = conn.getInputStream();
 //                        int length = conn.getContentLength();
 
-                        File apkFile = new File(FileConfig.getApkFile(), version);
+                        File apkFile = new File(FileConfig.getApkFile(), apkName);
                         FileOutputStream fos = new FileOutputStream(apkFile);
 
                         int count = 0;
@@ -102,7 +107,9 @@ public class UpdateUtils {
                             if (numread < 0) {
                                 handler.sendEmptyMessage(0x22);
 //                                AppUtils.installApp(apkFile);
-                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
+                                LogUtils.e(apkFile.getAbsolutePath());
+                                startUpdate(apkFile.getAbsolutePath());
+//                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
                                 break;
                             }
                             fos.write(buffer, 0, numread);
@@ -122,9 +129,53 @@ public class UpdateUtils {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            LogUtils.e(Thread.currentThread().getName(), "2");
+//            LogUtils.e(Thread.currentThread().getName(), "2");
         }
     };
 
+
+    // 适配android9.0之前的安装方法
+    private void startUpdate(String apkPath) {
+        Process process = null;
+        BufferedReader successResult = null;
+        BufferedReader errorResult = null;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder errorMsg = new StringBuilder();
+        try {
+            // 7.0以后版本需要额外添加
+            //           "-i", "当前应用包名",
+            // 两个字段，并且需要应用支持 android.permission.INSTALL_PACKAGES 权限**
+            process = new ProcessBuilder("pm", "install", "-i", "com.ipad.ktvphone", "-r", apkPath).start();
+            successResult = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            errorResult = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+            String s;
+            while ((s = successResult.readLine()) != null) {
+                successMsg.append(s);
+            }
+            while ((s = errorResult.readLine()) != null) {
+                errorMsg.append(s);
+            }
+        } catch (Exception e) {
+            ToastUtils.showShort(e.toString());
+            Log.e(TAG, "Exception " + e.toString());
+        } finally {
+            try {
+                if (successResult != null) {
+                    successResult.close();
+                }
+                if (errorResult != null) {
+                    errorResult.close();
+                }
+            } catch (Exception e) {
+
+            }
+            if (process != null) {
+                process.destroy();
+            }
+        }
+        Log.e(TAG, "errorMsg " + errorMsg.toString());
+        Log.d(TAG, "successMsg " + successMsg.toString());
+
+    }
 
 }

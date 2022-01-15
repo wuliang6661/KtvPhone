@@ -91,6 +91,7 @@ public class MusicPlayUtils {
     public void stopPlay() {
         if (mediaPlayer != null) {
             mediaPlayer.stop();
+            mediaPlayer.reset();
             mediaPlayer.release(); //切记一定要release
             mediaPlayer = null;
             musicBo = null;

@@ -18,7 +18,7 @@ public class FileConfig {
      * 所有文件的父级目录
      */
     public static String getBaseFile() {
-        return Environment.getExternalStorageDirectory().getPath() + "/Teach";
+        return Environment.getExternalStorageDirectory().getPath() + "/box_project";
     }
 
 

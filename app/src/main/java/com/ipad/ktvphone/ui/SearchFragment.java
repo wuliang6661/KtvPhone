@@ -11,6 +11,7 @@ import com.ipad.ktvphone.base.BaseFragment;
 import com.ipad.ktvphone.entity.MusicBo;
 import com.ipad.ktvphone.entity.event.HideSearchEvent;
 import com.ipad.ktvphone.entity.event.SearchMusicEvent;
+import com.ipad.ktvphone.utils.CreateOrderUtils;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGRecycleViewAdapter;
 import com.ipad.ktvphone.weight.lgrecycleadapter.LGViewHolder;
 
@@ -83,6 +84,7 @@ public class SearchFragment extends BaseFragment {
                 holder.setImageUrl(getActivity(), R.id.music_img, musicBo.song_cover);
                 holder.setText(R.id.music_name, musicBo.song_name);
                 holder.setText(R.id.music_person, musicBo.singer_name);
+                holder.itemView.setOnClickListener(v -> CreateOrderUtils.createOrder(musicBo));
             }
         };
         searchMusicList.setAdapter(adapter);
