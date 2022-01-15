@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         editText = findViewById(R.id.edit_view);
         searchFragment = findViewById(R.id.search_fragment);
         versionName = findViewById(R.id.version_name);
-        versionName.setText(AppUtils.getAppVersionName());
+        versionName.setText("当前版本：v" + AppUtils.getAppVersionName());
         setListener();
 
         searchDialog = new SearchFragment();
