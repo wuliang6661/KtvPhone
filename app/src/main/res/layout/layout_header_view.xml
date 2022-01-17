@@ -17,6 +17,7 @@
 
 
         <FrameLayout
+            android:id="@+id/logo"
             android:layout_width="168dp"
             android:layout_height="match_parent"
             android:background="#ff8000">

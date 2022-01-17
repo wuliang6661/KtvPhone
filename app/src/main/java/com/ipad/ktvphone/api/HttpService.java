@@ -35,6 +35,12 @@ public interface HttpService {
     @POST("/on_demand_songs/api/v1/heartbeat")
     Observable<BaseResult<VersionBO>> postHeartbeat(@Field("data") String data, @Field("time") long time, @Field("version") int version);
 
+    /**
+     * 检测更新
+     */
+    @POST("/on_demand_songs/api/v1/firmware_update")
+    Observable<BaseResult<VersionBO>> checkUpdate();
+
 
     /**
      * 查询正在播放的歌曲信息

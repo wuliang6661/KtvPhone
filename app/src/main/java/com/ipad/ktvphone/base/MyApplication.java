@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.Utils;
 
 import androidx.multidex.MultiDex;
 
@@ -25,6 +26,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CustomActivityOnCrash.install(this);
+        Utils.init(this);
         spUtils = SPUtils.getInstance("ktv_phone");
     }
 

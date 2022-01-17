@@ -12,8 +12,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.FragmentUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
 import com.ipad.ktvphone.base.BaseActivity;
@@ -23,6 +26,7 @@ import com.ipad.ktvphone.entity.event.HideSearchEvent;
 import com.ipad.ktvphone.entity.event.SearchMusicEvent;
 import com.ipad.ktvphone.ui.HomeFragment;
 import com.ipad.ktvphone.ui.SearchFragment;
+import com.ipad.ktvphone.utils.UpdateUtils;
 import com.ipad.ktvphone.weight.OnDoubleClickListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -32,7 +36,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.Nullable;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,6 +64,7 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(Settings.ACTION_SETTINGS);
             startActivity(intent);
         }));
+        findViewById(R.id.logo).setOnTouchListener(new OnDoubleClickListener(this::checkUpdate));
         setListener();
 
         searchDialog = new SearchFragment();
@@ -139,11 +143,28 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    /**
+     * 检测更新
+     */
+    private void checkUpdate() {
+        HttpServiceIml.checkUpdate().subscribe(new HttpResultSubscriber<VersionBO>() {
+            @Override
+            public void onSuccess(VersionBO versionBO) {
+                new UpdateUtils().checkUpdate(MainActivity.this, versionBO);
+            }
+
+            @Override
+            public void onFiled(String message) {
+                ToastUtils.showShort(message);
+            }
+        });
+    }
+
+
     private void requestHeart() {
         HttpServiceIml.postHeartbeat().subscribe(new HttpResultSubscriber<VersionBO>() {
             @Override
             public void onSuccess(VersionBO s) {
-//                new UpdateUtils().checkUpdate(MainActivity.this, s);
             }
 
             @Override

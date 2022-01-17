@@ -2,12 +2,17 @@ package com.ipad.ktvphone.utils;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.LogUtils;
@@ -23,9 +28,6 @@ import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
-
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 
 /**
@@ -48,7 +50,9 @@ public class UpdateUtils {
         this.context = context;
         if (Integer.parseInt(versionBO.getLatest_version()) > AppUtils.getAppVersionCode()) {
             //默认强制更新
-            checkPrission(versionBO.getDownload_url());
+            createCustomDialogTwo(versionBO);
+        } else {
+            ToastUtils.showShort("已是最新版本");
         }
     }
 
@@ -71,6 +75,22 @@ public class UpdateUtils {
         }
     }
 
+
+    private void createCustomDialogTwo(VersionBO versionBO) {
+        AlertDialog dialog = new AlertDialog.Builder(context)
+                .setTitle("发现新版本")
+                .setMessage("是否更新")
+                .setNegativeButton("取消", null)
+                .setPositiveButton("去更新", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ToastUtils.showShort("开始下载新版本");
+                        checkPrission(versionBO.getDownload_url());
+                    }
+                })
+                .create();
+        dialog.show();
+    }
 
     /* 开启新线程下载apk文件
      */
@@ -106,10 +126,7 @@ public class UpdateUtils {
                             // 下载完成
                             if (numread < 0) {
                                 handler.sendEmptyMessage(0x22);
-//                                AppUtils.installApp(apkFile);
-                                LogUtils.e(apkFile.getAbsolutePath());
-//                                startUpdate(apkFile.getAbsolutePath());
-                                InstallApkUtils.excuteSuCMD(apkFile.getAbsolutePath());
+                                AppUtils.installApp(apkFile);
                                 break;
                             }
                             fos.write(buffer, 0, numread);
@@ -129,7 +146,7 @@ public class UpdateUtils {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-//            LogUtils.e(Thread.currentThread().getName(), "2");
+            LogUtils.e(Thread.currentThread().getName(), "2");
         }
     };
 

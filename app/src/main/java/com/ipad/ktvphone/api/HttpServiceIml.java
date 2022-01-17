@@ -41,6 +41,12 @@ public class HttpServiceIml {
         return getService().postHeartbeat("online", System.currentTimeMillis(), AppUtils.getAppVersionCode()).compose(RxResultHelper.httpRusult());
     }
 
+    /**
+     * 检测更新
+     */
+    public static Observable<VersionBO> checkUpdate() {
+        return getService().checkUpdate().compose(RxResultHelper.httpRusult());
+    }
 
     /**
      * 查询正在播放的歌曲信息
