@@ -80,11 +80,16 @@ public class HomeFragment extends BaseFragment {
 
         initView();
         setTimeAdapter();
-        getPlayList();
         lunxunPlaying();
-        getTopSongs();
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getPlayList();
+        getTopSongs();
+    }
 
     private void initView() {
         timeRecycle = rootView.findViewById(R.id.time_recycle);
