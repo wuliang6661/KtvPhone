@@ -60,11 +60,11 @@ public class MainActivity extends BaseActivity {
         searchFragment = findViewById(R.id.search_fragment);
         versionName = findViewById(R.id.version_name);
         versionName.setText("当前版本：v" + AppUtils.getAppVersionName());
-        versionName.setOnTouchListener(new OnDoubleClickListener(() -> {
+        versionName.setOnTouchListener(new OnDoubleClickListener(this::checkUpdate));
+        findViewById(R.id.logo).setOnTouchListener(new OnDoubleClickListener(() -> {
             Intent intent = new Intent(Settings.ACTION_SETTINGS);
             startActivity(intent);
         }));
-        findViewById(R.id.logo).setOnTouchListener(new OnDoubleClickListener(this::checkUpdate));
         setListener();
 
         searchDialog = new SearchFragment();
