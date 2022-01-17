@@ -74,7 +74,7 @@ public class ApiManager {
         LogUtils.e(DeviceUtils.getMacAddress());
         // 以拦截到的请求为基础创建一个新的请求对象，然后插入Header
         request = chain.request().newBuilder()
-                .addHeader("DEVICE-ID", "10:b1:f8:8c:e1:3b")
+                .addHeader("DEVICE-ID", DeviceUtils.getMacAddress())
                 .build();
         return chain.proceed(request);
     };
