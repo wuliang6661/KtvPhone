@@ -13,6 +13,13 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -34,14 +41,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import rx.Observable;
 import rx.Observer;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -64,6 +66,7 @@ public class HomeFragment extends BaseFragment {
     private TextView playingMusicPerson;
 
     LGRecycleViewAdapter<MusicBo> adapter;
+    private Subscription subscription;
 
     @Nullable
     @Override
@@ -81,15 +84,15 @@ public class HomeFragment extends BaseFragment {
         initView();
         setTimeAdapter();
         lunxunPlaying();
+        refreshData();
     }
 
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void refreshData(){
         getPlayList();
         getTopSongs();
     }
+
 
     private void initView() {
         timeRecycle = rootView.findViewById(R.id.time_recycle);
@@ -119,7 +122,7 @@ public class HomeFragment extends BaseFragment {
 
 
     private void lunxunPlaying() {
-        Observable.interval(0, 10, TimeUnit.SECONDS)
+        subscription = Observable.interval(0, 10, TimeUnit.SECONDS)
                 .observeOn(Schedulers.io())
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -308,10 +311,18 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onPause() {
         super.onPause();
-        if(adapter != null){
+        if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
         MusicPlayUtils.getInstance().stopPlay();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(subscription != null){
+            subscription.unsubscribe();
+        }
     }
 
     private void setRecommendAdapter(PlayListBO listBO) {

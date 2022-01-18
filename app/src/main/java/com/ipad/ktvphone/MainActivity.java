@@ -27,6 +27,7 @@ import com.ipad.ktvphone.entity.event.HideSearchEvent;
 import com.ipad.ktvphone.entity.event.SearchMusicEvent;
 import com.ipad.ktvphone.ui.HomeFragment;
 import com.ipad.ktvphone.ui.SearchFragment;
+import com.ipad.ktvphone.utils.HeartBeatUtils;
 import com.ipad.ktvphone.utils.UpdateUtils;
 import com.ipad.ktvphone.weight.OnDoubleClickListener;
 
@@ -35,12 +36,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
 
@@ -50,6 +45,7 @@ public class MainActivity extends BaseActivity {
 
     private FrameLayout searchFragment;
     private TextView versionName;
+    private HomeFragment homeFragment;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -69,9 +65,10 @@ public class MainActivity extends BaseActivity {
         setListener();
 
         searchDialog = new SearchFragment();
-        FragmentUtils.add(getSupportFragmentManager(), new HomeFragment(), R.id.container_fragment);
+        homeFragment = new HomeFragment();
+        FragmentUtils.add(getSupportFragmentManager(), homeFragment, R.id.container_fragment);
 //        RootUtils.upgradeRootPermission(getPackageCodePath());
-        startHeartbeat();
+        HeartBeatUtils.getInstance().start();
     }
 
     @Override
@@ -97,6 +94,12 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        homeFragment.refreshData();
+    }
+
     /**
      * 搜索歌曲
      */
@@ -119,31 +122,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
-    /**
-     * 建立心跳连接
-     */
-    private void startHeartbeat() {
-        Observable.interval(0, 2, TimeUnit.MINUTES)
-                .observeOn(Schedulers.io())
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onCompleted() {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                    }
-
-                    @Override
-                    public void onNext(Long aLong) {
-                        requestHeart();
-                    }
-                });
-    }
-
-
     /**
      * 检测更新
      */
@@ -165,19 +143,6 @@ public class MainActivity extends BaseActivity {
         });
     }
 
-
-    private void requestHeart() {
-        HttpServiceIml.postHeartbeat().subscribe(new HttpResultSubscriber<VersionBO>() {
-            @Override
-            public void onSuccess(VersionBO s) {
-            }
-
-            @Override
-            public void onFiled(String message) {
-
-            }
-        });
-    }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(HideSearchEvent event) {

@@ -54,6 +54,7 @@
                 android:imeOptions="actionSearch"
                 android:paddingLeft="35dp"
                 android:singleLine="true"
+                android:visibility="gone"
                 android:textColor="#373737"
                 android:textColorHint="#A9A8CB"
                 android:textSize="8sp" />
