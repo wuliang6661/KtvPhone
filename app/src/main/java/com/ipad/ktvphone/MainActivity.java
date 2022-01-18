@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 
 import com.blankj.utilcode.util.AppUtils;
 import com.blankj.utilcode.util.FragmentUtils;
+import com.blankj.utilcode.util.StringUtils;
 import com.blankj.utilcode.util.ToastUtils;
 import com.ipad.ktvphone.api.HttpResultSubscriber;
 import com.ipad.ktvphone.api.HttpServiceIml;
@@ -150,6 +151,10 @@ public class MainActivity extends BaseActivity {
         HttpServiceIml.checkUpdate().subscribe(new HttpResultSubscriber<VersionBO>() {
             @Override
             public void onSuccess(VersionBO versionBO) {
+                if (StringUtils.isEmpty(versionBO.getLatest_version())) {
+                    ToastUtils.showShort("已是最新版本");
+                    return;
+                }
                 new UpdateUtils().checkUpdate(MainActivity.this, versionBO);
             }
 
