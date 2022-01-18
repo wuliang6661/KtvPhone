@@ -35,6 +35,8 @@ public class ApiManager {
         builder = new OkHttpClient.Builder();
         OkHttpClientNoVerifyUtil.createClientBuilder_noVerify(builder);
         builder.connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        builder.writeTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        builder.readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         HttpLoggingInterceptor.Level level = HttpLoggingInterceptor.Level.BODY;
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(message -> Log.i(TAG, "log: " + message));
         loggingInterceptor.setLevel(level);
@@ -53,7 +55,6 @@ public class ApiManager {
 
     /**
      * 获取请求代理
-     *
      */
     public <T> T configRetrofit(Class<T> service, String url) {
         Retrofit mRetrofit = new Retrofit.Builder()
