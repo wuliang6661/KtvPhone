@@ -3,6 +3,7 @@ package com.ipad.ktvphone.ui;
 import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +14,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.blankj.utilcode.util.StringUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.bumptech.glide.request.RequestOptions;
 import com.ipad.ktvphone.R;
@@ -41,6 +36,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import rx.Observable;
 import rx.Observer;
 import rx.Subscription;
@@ -177,20 +178,7 @@ public class HomeFragment extends BaseFragment {
                     playingMusicPerson.setText("歌手：暂无");
                     playingMusicImg.setImageResource(R.mipmap.default_img);
                 } else {
-                    Glide.with(AppManager.getAppManager().curremtActivity()).load(musicBo.song_cover)
-                            .placeholder(R.mipmap.default_img)
-                            .error(R.mipmap.default_img)
-                            .apply(RequestOptions.bitmapTransform(new CircleCrop()))
-                            .into(playingMusicImg);
-                    playingMusicName.setText("歌曲名：" + musicBo.song_name);
-                    playingMusicPerson.setText("歌手：" + musicBo.singer_name);
-                    if (playingMusicBg.getAnimation() == null || !playingMusicBg.getAnimation().hasStarted()) {
-                        RotateAnimation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
-                        rotateAnimation.setInterpolator(new LinearInterpolator());
-                        rotateAnimation.setDuration(8000);
-                        rotateAnimation.setRepeatCount(Animation.INFINITE);
-                        playingMusicBg.startAnimation(rotateAnimation);
-                    }
+                    new Handler().postDelayed(() -> showPlayingMusic(musicBo),200);
                 }
             }
 
@@ -199,6 +187,25 @@ public class HomeFragment extends BaseFragment {
                 showToast(message);
             }
         });
+    }
+
+
+    private void showPlayingMusic(MusicBo musicBo){
+        Glide.with(AppManager.getAppManager().curremtActivity()).load(musicBo.song_cover)
+                .placeholder(R.mipmap.default_img)
+                .error(R.mipmap.default_img)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                .into(playingMusicImg);
+        playingMusicName.setText("歌曲名：" + musicBo.song_name);
+        playingMusicPerson.setText("歌手：" + musicBo.singer_name);
+        if (playingMusicBg.getAnimation() == null || !playingMusicBg.getAnimation().hasStarted()) {
+            RotateAnimation rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setInterpolator(new LinearInterpolator());
+            rotateAnimation.setDuration(8000);
+            rotateAnimation.setRepeatCount(Animation.INFINITE);
+            playingMusicBg.startAnimation(rotateAnimation);
+        }
     }
 
 
@@ -241,6 +248,16 @@ public class HomeFragment extends BaseFragment {
 
 
     private void setRankingAdapter(List<MusicBo> musicBos) {
+        if(adapter != null){
+            adapter.setData(musicBos);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    adapter.notifyDataSetChanged();
+                }
+            },200);
+            return;
+        }
         adapter = new LGRecycleViewAdapter<MusicBo>(musicBos) {
             @Override
             public int getLayoutId(int viewType) {
@@ -273,6 +290,7 @@ public class HomeFragment extends BaseFragment {
                 holder.setText(R.id.play_num, musicBo.play_count);
                 Glide.with(AppManager.getAppManager().curremtActivity()).load(musicBo.song_cover)
                         .apply(RequestOptions.bitmapTransform(new CircleCrop()))
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into((ImageView) holder.getView(R.id.music_img));
                 holder.getView(R.id.create_order).setOnClickListener(v -> {
                     MusicPlayUtils.getInstance().stopPlay();

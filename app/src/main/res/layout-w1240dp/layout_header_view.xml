@@ -40,7 +40,7 @@
             android:layout_weight="1"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:visibility="invisible">
+            android:visibility="visible">
 
 
             <EditText

@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiManager {
 
     private static final String TAG = "ApiManager";
-    private static final int DEFAULT_TIMEOUT = 5;
+    private static final int DEFAULT_TIMEOUT = 60;
     OkHttpClient.Builder builder;
 
     /**
