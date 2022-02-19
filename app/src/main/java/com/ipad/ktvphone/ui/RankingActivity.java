@@ -45,7 +45,7 @@ public class RankingActivity extends BaseActivity {
     List<MusicBo> musicData;
     LGRecycleViewAdapter<MusicBo> adapter;
 
-    private int from = 0;
+    private int from = 1;
 
     //1 为排行榜搜索， 0 是输入框搜索
     private int type = 1;
